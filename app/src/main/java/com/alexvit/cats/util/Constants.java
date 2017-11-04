@@ -1,4 +1,4 @@
-package com.alexvit.cats;
+package com.alexvit.cats.util;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.

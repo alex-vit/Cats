@@ -13,7 +13,7 @@ import io.reactivex.functions.Consumer;
 public class BasePresenter<View extends BaseView> {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private View view;
+    protected View view;
 
     public void attach(View view) {
         this.view = view;
@@ -31,7 +31,4 @@ public class BasePresenter<View extends BaseView> {
         compositeDisposable.add(disposable);
     }
 
-    protected View getView() {
-        return view;
-    }
 }
