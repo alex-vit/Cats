@@ -17,6 +17,8 @@ interface ListContract {
 
     interface View extends BaseView {
         void displayImages(List<Image> images);
+
+        void showLoading(boolean show);
     }
 
 }

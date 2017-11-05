@@ -66,7 +66,9 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
                     @Override
                     public void onError() {
-                        DetailActivity.this.onError("Couldn't find image " + image.id);
+                        String message = String.format(
+                                getString(R.string.error_failed_to_load), image.id);
+                        DetailActivity.this.onError(message);
                         finish();
                     }
                 });

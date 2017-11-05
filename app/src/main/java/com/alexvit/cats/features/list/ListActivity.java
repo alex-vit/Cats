@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
@@ -27,6 +29,7 @@ public class ListActivity extends BaseActivity<ListPresenter>
 
     private ListAdapter adapter;
     private RecyclerView rvThumbnails;
+    private ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,15 @@ public class ListActivity extends BaseActivity<ListPresenter>
     }
 
     @Override
+    public void showLoading(boolean isLoading) {
+        if (isLoading) {
+            loading.setVisibility(View.VISIBLE);
+        } else {
+            loading.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void onItemClicked(Image image) {
         launchDetails(image.id);
     }
@@ -58,6 +70,7 @@ public class ListActivity extends BaseActivity<ListPresenter>
     @Override
     protected void bindViews() {
         rvThumbnails = findViewById(R.id.rv_thumbnails);
+        loading = findViewById(R.id.loading);
     }
 
     private void initRecycler() {

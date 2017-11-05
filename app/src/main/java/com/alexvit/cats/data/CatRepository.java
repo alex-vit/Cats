@@ -27,28 +27,40 @@ public class CatRepository {
     }
 
     public Observable<List<Image>> getRandomImages(int count) {
+        return getRandomImages(count, false);
+    }
 
-        Observable<List<Image>> cacheObs = Observable.fromCallable(() -> {
-            if (randomImagesCache == null) {
-                throw new NullPointerException("List is null");
-            } else {
-                return randomImagesCache;
-            }
-        });
+    public Observable<List<Image>> getRandomImages(int count, boolean forceLoad) {
 
-        Observable<List<Image>> remoteObs = remote.getRandomImages(count)
+        final Observable<List<Image>> remoteObs = remote.getRandomImages(count)
                 .doOnNext(list -> {
                     randomImagesCache = list;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        return cacheObs.onErrorResumeNext(remoteObs);
+        if (forceLoad) {
+            randomImagesCache = null;
+            return remoteObs;
+        } else {
+            return listObservable(randomImagesCache).onErrorResumeNext(remoteObs);
+        }
+
     }
 
     public Observable<Image> getImageById(String id) {
         return remote.getImageById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<List<Image>> listObservable(List<Image> list) {
+        return Observable.fromCallable(() -> {
+            if (randomImagesCache == null) {
+                throw new NullPointerException("List is null");
+            } else {
+                return randomImagesCache;
+            }
+        });
     }
 }
