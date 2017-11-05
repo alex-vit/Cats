@@ -43,7 +43,6 @@ public class CatRepository {
                 .observeOn(AndroidSchedulers.mainThread());
 
         if (forceLoad) {
-            randomImagesCache = null;
             return remoteObs;
         } else {
             return fromNullable(randomImagesCache).onErrorResumeNext(remoteObs);

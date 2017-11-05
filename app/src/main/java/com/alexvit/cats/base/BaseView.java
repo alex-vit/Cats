@@ -10,4 +10,6 @@ public interface BaseView {
 
     void onError(Throwable throwable);
 
+    void showLoading(boolean isLoading);
+
 }

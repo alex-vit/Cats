@@ -45,7 +45,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
             finish();
         }
 
-        postponeEnterTransition();
+//        postponeEnterTransition();
 
         bindViews();
 
@@ -77,8 +77,14 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
         ivUp = findViewById(R.id.iv_up);
         ivUp.setOnClickListener(view -> presenter.vote(id, Query.Score.LOVE));
+
         ivDown = findViewById(R.id.iv_down);
         ivDown.setOnClickListener(view -> presenter.vote(id, Query.Score.HATE));
+    }
+
+    @Override
+    public void showLoading(boolean isLoading) {
+
     }
 
     @Override
@@ -89,7 +95,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 .into(ivFull, new Callback() {
                     @Override
                     public void onSuccess() {
-                        schedulePostponedTransition(ivFull);
+//                        schedulePostponedTransition(ivFull);
                     }
 
                     @Override

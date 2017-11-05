@@ -32,6 +32,7 @@ public abstract class BaseActivity<Presenter extends BasePresenter>
     @Override
     public void onError(String errorMessage) {
         toast(errorMessage);
+        showLoading(false);
     }
 
     protected abstract void bindViews();

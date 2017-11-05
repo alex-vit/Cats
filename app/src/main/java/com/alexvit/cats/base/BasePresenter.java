@@ -24,8 +24,7 @@ public class BasePresenter<View extends BaseView> {
     }
 
     protected <T> void subscribe(Observable<T> observable, Consumer<? super T> onNext) {
-        subscribe(observable, onNext, view::onError, () -> {
-        });
+        subscribe(observable, onNext, view::onError, () -> view.showLoading(false));
     }
 
     protected <T> void subscribe(Observable<T> observable,
