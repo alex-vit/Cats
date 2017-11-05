@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -25,6 +26,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     private static final String KEY_ID = "KEY_ID";
 
     private String id;
+    private Image image;
 
     @Inject
     DetailPresenter presenter;
@@ -52,11 +54,20 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
                 supportFinishAfterTransition();
+                return true;
+            case R.id.menu_share:
+                shareText(image.url);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -86,6 +97,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
     @Override
     public void displayImage(Image image) {
+        this.image = image;
         setTitle(image.id);
         Picasso.with(this)
                 .load(image.url)
@@ -139,6 +151,13 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     private void setImageViewColor(ImageView imageView, @ColorRes int color) {
         imageView.setColorFilter(ContextCompat.getColor(this, color),
                 android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    private void shareText(String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
     }
 
 }

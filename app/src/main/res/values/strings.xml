@@ -4,6 +4,7 @@
     <string name="error_failed_to_load">Failed to load image %s.</string>
     <string name="alt_thumb_down">Thumb down</string>
     <string name="alt_thumb_up">Thumb up</string>
-    <string name="notification_upvoted">Upvoted! ^_^</string>
+    <string name="notification_upvoted">Upvoted!</string>
     <string name="notification_downvoted">Downvoted :(</string>
+    <string name="share_title">Share this kitty…</string>
 </resources>
