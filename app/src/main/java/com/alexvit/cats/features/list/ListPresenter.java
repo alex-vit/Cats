@@ -26,13 +26,7 @@ public class ListPresenter extends BasePresenter<ListContract.View>
     public void attach(ListContract.View view) {
         super.attach(view);
 
-        List<Image> cached = repository.getRandomImagesCache();
-        if (cached != null) {
-            // If possible, return something synchronously to preserve scroll position
-            view.displayImages(cached);
-        } else {
-            loadRandomImages();
-        }
+        loadRandomImages();
     }
 
     @Override
