@@ -2,4 +2,6 @@
     <string name="app_name">Cats</string>
     <string name="alt_cat">Probably a cat image.</string>
     <string name="error_failed_to_load">Failed to load image %s.</string>
+    <string name="alt_thumb_down">Thumb down</string>
+    <string name="alt_thumb_up">Thumb up</string>
 </resources>
