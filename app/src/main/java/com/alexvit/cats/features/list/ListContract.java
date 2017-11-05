@@ -13,11 +13,12 @@ interface ListContract {
 
     interface Presenter {
         void loadRandomImages();
+
+        void refresh();
     }
 
     interface View extends BaseView {
         void displayImages(List<Image> images);
-
         void showLoading(boolean show);
     }
 

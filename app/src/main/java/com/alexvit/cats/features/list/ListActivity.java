@@ -3,11 +3,10 @@ package com.alexvit.cats.features.list;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
@@ -31,7 +30,7 @@ public class ListActivity extends BaseActivity<ListPresenter>
 
     private ListAdapter adapter;
     private RecyclerView rvThumbnails;
-    private ProgressBar loading;
+    private SwipeRefreshLayout refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +56,7 @@ public class ListActivity extends BaseActivity<ListPresenter>
 
     @Override
     public void showLoading(boolean isLoading) {
-        if (isLoading) {
-            loading.setVisibility(View.VISIBLE);
-        } else {
-            loading.setVisibility(View.GONE);
-        }
+        refresh.setRefreshing(isLoading);
     }
 
     @Override
@@ -72,14 +67,17 @@ public class ListActivity extends BaseActivity<ListPresenter>
     @Override
     protected void bindViews() {
         rvThumbnails = findViewById(R.id.rv_thumbnails);
-        loading = findViewById(R.id.loading);
+
+        refresh = findViewById(R.id.refresh);
+        refresh.setColorSchemeResources(R.color.primary, R.color.accent);
+        refresh.setOnRefreshListener(this::refresh);
     }
 
     private void initRecycler() {
         adapter = new ListAdapter(this);
         rvThumbnails.setAdapter(adapter);
 
-        int columns = Screen.columnCount(this, COL_WIDTH);
+        int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
         rvThumbnails.setLayoutManager(new GridLayoutManager(
                 this, columns, GridLayoutManager.VERTICAL, false));
     }
@@ -91,6 +89,10 @@ public class ListActivity extends BaseActivity<ListPresenter>
                 this, shared, "cat_image");
 
         startActivity(intent, options.toBundle());
+    }
+
+    private void refresh() {
+        presenter.refresh();
     }
 
 }

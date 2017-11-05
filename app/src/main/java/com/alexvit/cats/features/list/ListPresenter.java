@@ -36,9 +36,15 @@ public class ListPresenter extends BasePresenter<ListContract.View>
         subscribe(observable,
                 view::displayImages,
                 view::onError,
-                () -> {
-                    view.showLoading(false);
-                });
+                () -> view.showLoading(false));
     }
 
+    @Override
+    public void refresh() {
+        Observable<List<Image>> observable = repository.getRandomImages(Constants.COUNT, true);
+        subscribe(observable,
+                view::displayImages,
+                view::onError,
+                () -> view.showLoading(false));
+    }
 }
