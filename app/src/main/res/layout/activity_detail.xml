@@ -30,6 +30,7 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <ImageView
+            android:id="@+id/iv_down"
             style="@style/Thumbs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -38,6 +39,7 @@
             android:src="@drawable/ic_thumb_down_black_24dp" />
 
         <ImageView
+            android:id="@+id/iv_up"
             style="@style/Thumbs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -11,10 +11,18 @@ interface DetailContract {
 
     interface Presenter {
         void setId(String id);
+
+        void vote(String id, int score);
     }
 
     interface View extends BaseView {
         void displayImage(Image image);
+
+        void displayUpvote();
+
+        void displayDownvote();
+
+        void resetVoteButtons();
     }
 
 }

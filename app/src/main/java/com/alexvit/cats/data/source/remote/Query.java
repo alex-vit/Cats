@@ -19,4 +19,13 @@ public final class Query {
         public static final String FULL = "full";
     }
 
+    public static final class Score {
+
+        private Score() {
+        }
+
+        public static final int LOVE = 10;
+        public static final int HATE = 1;
+    }
+
 }

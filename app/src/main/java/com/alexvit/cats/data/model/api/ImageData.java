@@ -9,8 +9,8 @@ import java.util.ArrayList;
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-@Root
-public class Data {
+@Root(name = "data")
+public class ImageData {
 
     @ElementList
     public ArrayList<Image> images;

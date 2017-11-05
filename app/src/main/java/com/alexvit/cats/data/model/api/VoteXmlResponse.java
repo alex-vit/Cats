@@ -4,13 +4,12 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * Created by Aleksandrs Vitjukovs on 11/4/2017.
+ * Created by Aleksandrs Vitjukovs on 11/5/2017.
  */
 
 @Root(name = "response")
-public class CatApiXmlResponse {
+public class VoteXmlResponse {
 
-    @Element
-    public Data data;
-
+    @Element(name = "data")
+    public VoteData data;
 }

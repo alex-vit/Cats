@@ -3,6 +3,8 @@ package com.alexvit.cats.features.detail;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.data.source.remote.Query;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +31,8 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     DetailPresenter presenter;
 
     ImageView ivFull;
+    ImageView ivUp;
+    ImageView ivDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,11 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Override
     protected void bindViews() {
         ivFull = findViewById(R.id.iv_full);
+
+        ivUp = findViewById(R.id.iv_up);
+        ivUp.setOnClickListener(view -> presenter.vote(id, Query.Score.LOVE));
+        ivDown = findViewById(R.id.iv_down);
+        ivDown.setOnClickListener(view -> presenter.vote(id, Query.Score.HATE));
     }
 
     @Override
@@ -92,6 +102,24 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 });
     }
 
+    @Override
+    public void displayUpvote() {
+        setImageViewColor(ivUp, R.color.accent);
+        toast(R.string.notification_upvoted);
+    }
+
+    @Override
+    public void displayDownvote() {
+        setImageViewColor(ivDown, R.color.accent);
+        toast(R.string.notification_downvoted);
+    }
+
+    @Override
+    public void resetVoteButtons() {
+        setImageViewColor(ivUp, R.color.icons);
+        setImageViewColor(ivDown, R.color.icons);
+    }
+
     public static Intent getIntent(Activity activity, String id) {
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(KEY_ID, id);
@@ -107,6 +135,11 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 return true;
             }
         });
+    }
+
+    private void setImageViewColor(ImageView imageView, @ColorRes int color) {
+        imageView.setColorFilter(ContextCompat.getColor(this, color),
+                android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
 }

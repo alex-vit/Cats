@@ -1,9 +1,11 @@
 package com.alexvit.cats.data;
 
 import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.data.model.api.Vote;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,6 +23,7 @@ public class CatRepository {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private List<Image> randomImagesCache;
+    private Map<String, Integer> votesCache;
 
     public CatRepository(CatRemoteDataSource remote) {
         this.remote = remote;
@@ -43,7 +46,7 @@ public class CatRepository {
             randomImagesCache = null;
             return remoteObs;
         } else {
-            return listObservable(randomImagesCache).onErrorResumeNext(remoteObs);
+            return fromNullable(randomImagesCache).onErrorResumeNext(remoteObs);
         }
 
     }
@@ -54,12 +57,29 @@ public class CatRepository {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private Observable<List<Image>> listObservable(List<Image> list) {
+    public Observable<Map<String, Integer>> getVotes() {
+        Observable<Map<String, Integer>> remoteObs = remote.getVotes()
+                .doOnNext(map -> votesCache = map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        // TODO bring this back
+//        return fromNullable(votesCache).onErrorResumeNext(remoteObs);
+        return remoteObs;
+    }
+
+    public Observable<Vote> vote(String id, int score) {
+        return remote.vote(id, score)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private <T> Observable<T> fromNullable(T nullable) {
         return Observable.fromCallable(() -> {
-            if (randomImagesCache == null) {
-                throw new NullPointerException("List is null");
+            if (nullable == null) {
+                throw new NullPointerException("Item is null");
             } else {
-                return randomImagesCache;
+                return nullable;
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.alexvit.cats.base;
 
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -34,6 +35,10 @@ public abstract class BaseActivity<Presenter extends BasePresenter>
     }
 
     protected abstract void bindViews();
+
+    protected void toast(@StringRes int stringRes) {
+        toast(getString(stringRes));
+    }
 
     protected void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
