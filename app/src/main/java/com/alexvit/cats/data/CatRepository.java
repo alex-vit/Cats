@@ -62,13 +62,12 @@ public class CatRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        // TODO bring this back
-//        return fromNullable(votesCache).onErrorResumeNext(remoteObs);
-        return remoteObs;
+        return fromNullable(votesCache).onErrorResumeNext(remoteObs);
     }
 
     public Observable<Vote> vote(String id, int score) {
         return remote.vote(id, score)
+                .doOnNext(__ -> votesCache = null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
