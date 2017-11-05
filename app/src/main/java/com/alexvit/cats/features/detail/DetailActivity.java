@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.alexvit.cats.R;
@@ -44,8 +43,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
             toast("No ID was given.");
             finish();
         }
-
-//        postponeEnterTransition();
 
         bindViews();
 
@@ -95,7 +92,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 .into(ivFull, new Callback() {
                     @Override
                     public void onSuccess() {
-//                        schedulePostponedTransition(ivFull);
                     }
 
                     @Override
@@ -138,17 +134,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(KEY_ID, id);
         return intent;
-    }
-
-    private void schedulePostponedTransition(ImageView imageView) {
-        imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                imageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                startPostponedEnterTransition();
-                return true;
-            }
-        });
     }
 
     private void setImageViewColor(ImageView imageView, @ColorRes int color) {
