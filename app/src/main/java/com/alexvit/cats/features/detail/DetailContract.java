@@ -16,13 +16,15 @@ interface DetailContract {
     }
 
     interface View extends BaseView {
+
         void displayImage(Image image);
-
         void displayUpvote();
-
         void displayDownvote();
-
         void resetVoteButtons();
+
+        void toastUpvote();
+
+        void toastDownvote();
     }
 
 }

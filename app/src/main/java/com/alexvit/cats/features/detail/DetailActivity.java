@@ -105,19 +105,27 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Override
     public void displayUpvote() {
         setImageViewColor(ivUp, R.color.accent);
-        toast(R.string.notification_upvoted);
     }
 
     @Override
     public void displayDownvote() {
         setImageViewColor(ivDown, R.color.accent);
-        toast(R.string.notification_downvoted);
     }
 
     @Override
     public void resetVoteButtons() {
         setImageViewColor(ivUp, R.color.icons);
         setImageViewColor(ivDown, R.color.icons);
+    }
+
+    @Override
+    public void toastUpvote() {
+        toast(R.string.notification_upvoted);
+    }
+
+    @Override
+    public void toastDownvote() {
+        toast(R.string.notification_downvoted);
     }
 
     public static Intent getIntent(Activity activity, String id) {

@@ -11,6 +11,7 @@
     <style name="Thumbs">
         <item name="android:tint">@color/icons</item>
         <item name="android:padding">@dimen/padding_s</item>
+        <item name="android:focusable">true</item>
     </style>
 
 </resources>
