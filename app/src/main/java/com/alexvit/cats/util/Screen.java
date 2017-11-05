@@ -13,16 +13,16 @@ public final class Screen {
     private Screen() {
     }
 
-    public static Pair<Float, Float> screenDimensionsDp(Context context) {
+    public static Pair<Integer, Integer> screenDimensionsDp(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float width = displayMetrics.widthPixels / displayMetrics.density;
         float height = displayMetrics.heightPixels / displayMetrics.density;
-        return new Pair<>(width, height);
+        return new Pair<>(Math.round(width), Math.round(height));
     }
 
     public static int columnCount(Context context, int desiredColumnWidth) {
-        Pair<Float, Float> screenDimensions = screenDimensionsDp(context);
-        int width = Math.round(screenDimensions.first);
+        Pair<Integer, Integer> dimensionsDp = screenDimensionsDp(context);
+        int width = dimensionsDp.first;
         return Math.round(width / desiredColumnWidth);
     }
 }

@@ -3,6 +3,8 @@ package com.alexvit.cats.features.detail;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.alexvit.cats.R;
@@ -15,6 +17,8 @@ import javax.inject.Inject;
 
 public class DetailActivity extends BaseActivity<DetailPresenter>
         implements DetailContract.View {
+
+    private static final String TAG = DetailActivity.class.getSimpleName();
 
     private static final String KEY_ID = "KEY_ID";
 
@@ -36,11 +40,25 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
             finish();
         }
 
+        postponeEnterTransition();
+
         bindViews();
 
         buildComponent().inject(this);
         presenter.attach(this);
         presenter.setId(id);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -61,7 +79,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 .into(ivFull, new Callback() {
                     @Override
                     public void onSuccess() {
-
+                        schedulePostponedTransition(ivFull);
                     }
 
                     @Override
@@ -78,6 +96,17 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(KEY_ID, id);
         return intent;
+    }
+
+    private void schedulePostponedTransition(ImageView imageView) {
+        imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                startPostponedEnterTransition();
+                return true;
+            }
+        });
     }
 
 }

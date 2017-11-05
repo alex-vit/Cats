@@ -6,6 +6,7 @@
 
     <com.alexvit.cats.widgets.AspectRatioImageView
         android:id="@+id/iv_thumbnail"
+        android:transitionName="cat_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"

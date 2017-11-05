@@ -38,11 +38,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Image image = getItem(position);
 
-        holder.ivThumbnail.setOnClickListener(__ -> listener.onItemClicked(getItem(position)));
-
         Picasso.with(holder.itemView.getContext())
                 .load(image.url)
                 .into(holder.ivThumbnail);
+
+        holder.ivThumbnail.setOnClickListener(__ -> listener.onItemClicked(getItem(position),
+                holder.ivThumbnail));
     }
 
     @Override
@@ -73,6 +74,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     interface OnItemClickListener {
-        void onItemClicked(Image image);
+        void onItemClicked(Image image, ImageView shared);
     }
 }

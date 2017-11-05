@@ -2,9 +2,11 @@ package com.alexvit.cats.features.list;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.alexvit.cats.R;
@@ -63,8 +65,8 @@ public class ListActivity extends BaseActivity<ListPresenter>
     }
 
     @Override
-    public void onItemClicked(Image image) {
-        launchDetails(image.id);
+    public void onItemClicked(Image image, ImageView shared) {
+        launchDetails(image.id, shared);
     }
 
     @Override
@@ -82,9 +84,13 @@ public class ListActivity extends BaseActivity<ListPresenter>
                 this, columns, GridLayoutManager.VERTICAL, false));
     }
 
-    private void launchDetails(String id) {
+    private void launchDetails(String id, ImageView shared) {
         Intent intent = DetailActivity.getIntent(this, id);
-        startActivity(intent);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, shared, "cat_image");
+
+        startActivity(intent, options.toBundle());
     }
 
 }
