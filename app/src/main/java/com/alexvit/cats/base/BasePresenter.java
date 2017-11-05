@@ -23,6 +23,11 @@ public class BasePresenter<View extends BaseView> {
         compositeDisposable.clear();
     }
 
+    protected <T> void subscribe(Observable<T> observable, Consumer<? super T> onNext) {
+        subscribe(observable, onNext, view::onError, () -> {
+        });
+    }
+
     protected <T> void subscribe(Observable<T> observable,
                                  Consumer<? super T> onNext,
                                  Consumer<? super Throwable> onError,

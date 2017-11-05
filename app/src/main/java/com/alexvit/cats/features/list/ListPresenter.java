@@ -28,7 +28,7 @@ public class ListPresenter extends BasePresenter<ListContract.View>
 
         List<Image> cached = repository.getRandomImagesCache();
         if (cached != null) {
-            // If possible, return something synchronously to preserve scroll position etc
+            // If possible, return something synchronously to preserve scroll position
             view.displayImages(cached);
         } else {
             loadRandomImages();
@@ -37,14 +37,8 @@ public class ListPresenter extends BasePresenter<ListContract.View>
 
     @Override
     public void loadRandomImages() {
-
         Observable<List<Image>> observable = repository.getRandomImages(Constants.COUNT);
-
-        subscribe(observable,
-                view::displayImages,
-                view::onError,
-                () -> {
-                });
+        subscribe(observable, view::displayImages);
     }
 
 }

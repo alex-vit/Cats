@@ -33,6 +33,8 @@ public abstract class BaseActivity<Presenter extends BasePresenter>
         toast(errorMessage);
     }
 
+    protected abstract void bindViews();
+
     protected void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

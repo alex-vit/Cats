@@ -12,7 +12,11 @@ import retrofit2.http.Query;
 
 public interface TheCatApiService {
 
-    @GET("images/get?format=xml&size=med&type=jpg,png")
-    Observable<CatApiXmlResponse> get(@Query("results_per_page") int resultsPerPage);
+    @GET("images/get?format=xml&type=jpg,png")
+    Observable<CatApiXmlResponse> get(
+            @Query("image_id") String imageId,
+            @Query("results_per_page") Integer resultsPerPage,
+            @Query("size") String size
+    );
 
 }

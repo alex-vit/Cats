@@ -2,6 +2,7 @@ package com.alexvit.cats.di.component;
 
 import com.alexvit.cats.di.module.PresenterModule;
 import com.alexvit.cats.di.scope.ActivityScope;
+import com.alexvit.cats.features.detail.DetailActivity;
 import com.alexvit.cats.features.list.ListActivity;
 
 import dagger.Component;
@@ -15,5 +16,7 @@ import dagger.Component;
 public interface ActivityComponent {
 
     void inject(ListActivity listActivity);
+
+    void inject(DetailActivity detailActivity);
 
 }

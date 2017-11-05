@@ -17,9 +17,14 @@ import java.util.List;
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Image> images = new ArrayList<>();
+    private final OnItemClickListener listener;
+
+    ListAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,6 +37,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Image image = getItem(position);
+
+        holder.ivThumbnail.setOnClickListener(__ -> listener.onItemClicked(getItem(position)));
 
         Picasso.with(holder.itemView.getContext())
                 .load(image.url)
@@ -63,5 +70,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
         }
 
+    }
+
+    interface OnItemClickListener {
+        void onItemClicked(Image image);
     }
 }

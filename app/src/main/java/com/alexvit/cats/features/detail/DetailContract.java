@@ -1,22 +1,20 @@
-package com.alexvit.cats.features.list;
+package com.alexvit.cats.features.detail;
 
 import com.alexvit.cats.base.BaseView;
 import com.alexvit.cats.data.model.api.Image;
-
-import java.util.List;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-interface ListContract {
+interface DetailContract {
 
     interface Presenter {
-        void loadRandomImages();
+        void setId(String id);
     }
 
     interface View extends BaseView {
-        void displayImages(List<Image> images);
+        void displayImage(Image image);
     }
 
 }

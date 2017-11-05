@@ -19,7 +19,12 @@ public class CatRemoteDataSource {
     }
 
     public Observable<List<Image>> getRandomImages(int count) {
-        return service.get(count)
+        return service.get(null, count, Query.Size.MEDIUM)
                 .map(response -> response.data.images);
+    }
+
+    public Observable<Image> getImageById(String id) {
+        return service.get(id, null, Query.Size.FULL)
+                .map(response -> response.data.images.get(0));
     }
 }

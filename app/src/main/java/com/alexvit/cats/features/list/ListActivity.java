@@ -1,13 +1,14 @@
 package com.alexvit.cats.features.list;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.features.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class ListActivity extends BaseActivity<ListPresenter>
-        implements ListContract.View {
+        implements ListContract.View, ListAdapter.OnItemClickListener {
 
     private static final String TAG = ListActivity.class.getSimpleName();
 
@@ -46,20 +47,31 @@ public class ListActivity extends BaseActivity<ListPresenter>
 
     @Override
     public void displayImages(List<Image> images) {
-        Log.d(TAG, "Got " + images.size() + " cats");
         adapter.setImages(images);
     }
 
-    private void bindViews() {
+    @Override
+    public void onItemClicked(Image image) {
+        launchDetails(image.id);
+    }
+
+    @Override
+    protected void bindViews() {
         rvThumbnails = findViewById(R.id.rv_thumbnails);
     }
 
     private void initRecycler() {
-        adapter = new ListAdapter();
+        adapter = new ListAdapter(this);
         rvThumbnails.setAdapter(adapter);
 
         int columns = Screen.columnCount(this, COL_WIDTH);
         rvThumbnails.setLayoutManager(new GridLayoutManager(
                 this, columns, GridLayoutManager.VERTICAL, false));
     }
+
+    private void launchDetails(String id) {
+        Intent intent = DetailActivity.getIntent(this, id);
+        startActivity(intent);
+    }
+
 }
