@@ -40,6 +40,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         Picasso.with(holder.itemView.getContext())
                 .load(image.url)
+                .placeholder(R.drawable.ic_image_24dp)
+                .error(R.drawable.ic_image_24dp)
                 .into(holder.ivThumbnail);
 
         holder.ivThumbnail.setOnClickListener(__ -> listener.onItemClicked(getItem(position),

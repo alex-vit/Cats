@@ -10,6 +10,6 @@ public final class Constants {
     }
 
     public static final String CAT_API_BASE_URL = "http://thecatapi.com/api/";
-    public static final int COUNT = 20;
+    public static final int COUNT = 40;
 
 }
