@@ -49,4 +49,7 @@ dependencies {
 
     // Picasso
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+
+    // Palette
+    implementation "com.android.support:palette-v7:$rootProject.supportLibraryVersion"
 }

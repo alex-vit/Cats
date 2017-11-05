@@ -2,9 +2,14 @@ package com.alexvit.cats.features.detail;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.graphics.Palette;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -104,6 +109,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 .into(ivFull, new Callback() {
                     @Override
                     public void onSuccess() {
+                        applyPalette(((BitmapDrawable) ivFull.getDrawable()).getBitmap());
                     }
 
                     @Override
@@ -158,6 +164,18 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
         startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
+    }
+
+    private void applyPalette(Bitmap bitmap) {
+        Palette.from(bitmap).generate(palette -> {
+            int muted = palette.getMutedColor(getResources().getColor(R.color.primary));
+            int color = palette.getVibrantColor(muted);
+            ActionBar bar = getSupportActionBar();
+            if (bar != null) {
+                bar.setBackgroundDrawable(new ColorDrawable(color));
+                getWindow().setStatusBarColor(color);
+            }
+        });
     }
 
 }
