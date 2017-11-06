@@ -28,6 +28,7 @@
 
         <activity
             android:name=".features.detail.DetailActivity"
+            android:label=""
             android:parentActivityName=".features.list.ListActivity" />
     </application>
 
