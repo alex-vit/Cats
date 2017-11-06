@@ -36,9 +36,7 @@ public class CatRepository {
     public Observable<List<Image>> getRandomImages(int count, boolean forceLoad) {
 
         final Observable<List<Image>> remoteObs = remote.getRandomImages(count)
-                .doOnNext(list -> {
-                    randomImagesCache = list;
-                })
+                .doOnNext(list -> randomImagesCache = list)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
@@ -51,9 +49,18 @@ public class CatRepository {
     }
 
     public Observable<Image> getImageById(String id) {
-        return remote.getImageById(id)
+
+        final Observable<Image> cacheObs = fromNullable(randomImagesCache)
+                .flatMapIterable(v -> v)
+                .filter(image -> image.id.equals(id))
+                .firstOrError()
+                .toObservable();
+
+        final Observable<Image> remoteObs = remote.getImageById(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+
+        return cacheObs.onErrorResumeNext(remoteObs);
     }
 
     public Observable<Map<String, Integer>> getVotes() {
