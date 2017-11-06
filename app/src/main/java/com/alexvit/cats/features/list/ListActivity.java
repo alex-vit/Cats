@@ -21,6 +21,7 @@ import javax.inject.Inject;
 public class ListActivity extends BaseActivity<ListPresenter>
         implements ListContract.View, ListAdapter.OnItemClickListener {
 
+    @SuppressWarnings("unused")
     private static final String TAG = ListActivity.class.getSimpleName();
 
     private static final int COL_WIDTH = 200;

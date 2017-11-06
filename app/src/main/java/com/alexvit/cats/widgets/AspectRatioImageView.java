@@ -14,7 +14,7 @@ import com.alexvit.cats.R;
 public class AspectRatioImageView extends AppCompatImageView {
 
     private static final float DEFAULT_ASPECT_RATIO = 1;
-    float ratio;
+    private float ratio;
 
     public AspectRatioImageView(Context context) {
         this(context, null);

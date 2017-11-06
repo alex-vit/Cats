@@ -26,6 +26,7 @@ import javax.inject.Inject;
 public class DetailActivity extends BaseActivity<DetailPresenter>
         implements DetailContract.View {
 
+    @SuppressWarnings("unused")
     private static final String TAG = DetailActivity.class.getSimpleName();
 
     private static final String KEY_ID = "KEY_ID";
@@ -36,9 +37,9 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Inject
     DetailPresenter presenter;
 
-    ImageView ivFull;
-    ImageView ivUp;
-    ImageView ivDown;
+    private ImageView ivFull;
+    private ImageView ivUp;
+    private ImageView ivDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

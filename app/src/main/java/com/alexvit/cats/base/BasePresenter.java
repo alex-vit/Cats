@@ -10,6 +10,7 @@ import io.reactivex.functions.Consumer;
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class BasePresenter<View extends BaseView> {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();

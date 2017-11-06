@@ -8,6 +8,7 @@ import android.util.Pair;
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
+@SuppressWarnings("WeakerAccess")
 public final class Screen {
 
     private Screen() {
