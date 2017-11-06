@@ -45,7 +45,11 @@ dependencies {
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-simplexml:$rootProject.retrofitVersion"
+    implementation ("com.squareup.retrofit2:converter-simplexml:$rootProject.retrofitVersion") {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
 
     // Picasso
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
