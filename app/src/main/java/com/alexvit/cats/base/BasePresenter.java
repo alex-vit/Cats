@@ -25,7 +25,13 @@ public class BasePresenter<View extends BaseView> {
     }
 
     protected <T> void subscribe(Observable<T> observable, Consumer<? super T> onNext) {
-        subscribe(observable, onNext, view::onError, () -> view.showLoading(false));
+        subscribe(observable,
+                onNext,
+                throwable -> {
+                    onError(throwable);
+                    view.showLoading(false);
+                },
+                () -> view.showLoading(false));
     }
 
     protected <T> void subscribe(Observable<T> observable,
@@ -34,6 +40,10 @@ public class BasePresenter<View extends BaseView> {
                                  Action onComplete) {
         Disposable disposable = observable.subscribe(onNext, onError, onComplete);
         compositeDisposable.add(disposable);
+    }
+
+    public void onError(Throwable throwable) {
+        view.displayError(throwable);
     }
 
 }

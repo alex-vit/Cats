@@ -126,10 +126,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
                     @Override
                     public void onError() {
-                        String message = String.format(
-                                getString(R.string.error_failed_to_load), image.id);
-                        DetailActivity.this.onError(message);
-                        finish();
+                        presenter.onError(new ImageLoadingException(image.id));
                     }
                 });
     }
@@ -188,6 +185,24 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 getWindow().setStatusBarColor(color);
             }
         });
+    }
+
+    public static final class ImageLoadingException extends Exception {
+
+        private final String imageId;
+
+        private ImageLoadingException() {
+            imageId = null;
+        }
+
+        public ImageLoadingException(String imageId) {
+            this.imageId = imageId;
+        }
+
+        @Override
+        public String getMessage() {
+            return "Failed to load image " + imageId;
+        }
     }
 
 }

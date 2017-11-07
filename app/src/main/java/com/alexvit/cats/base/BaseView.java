@@ -6,10 +6,10 @@ package com.alexvit.cats.base;
 
 public interface BaseView {
 
-    void onError(String message);
-
-    void onError(Throwable throwable);
+    void displayError(Throwable throwable);
 
     void showLoading(boolean isLoading);
+
+    void close();
 
 }

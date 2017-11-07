@@ -4,6 +4,7 @@ import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.api.Vote;
 import com.alexvit.cats.data.source.remote.Query;
+import com.alexvit.cats.features.detail.DetailActivity.ImageLoadingException;
 
 import io.reactivex.Observable;
 
@@ -46,5 +47,14 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
                         view.toastDownvote();
                     }
                 });
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        super.onError(throwable);
+
+        if (throwable instanceof ImageLoadingException) {
+            view.close();
+        }
     }
 }

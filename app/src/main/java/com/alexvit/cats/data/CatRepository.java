@@ -74,7 +74,8 @@ public class CatRepository {
 
     public Observable<Vote> vote(String id, int score) {
         return remote.vote(id, score)
-                .doOnNext(__ -> votesCache = null)
+                // invalidate as soon as we attempt to vote, not in onNext
+                .doOnSubscribe(__ -> votesCache = null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

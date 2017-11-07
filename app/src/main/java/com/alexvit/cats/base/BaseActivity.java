@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.alexvit.cats.App;
 import com.alexvit.cats.di.component.ActivityComponent;
 import com.alexvit.cats.di.component.DaggerActivityComponent;
+import com.alexvit.cats.util.Error;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
@@ -38,14 +39,14 @@ public abstract class BaseActivity<Presenter extends BasePresenter<? extends Bas
     }
 
     @Override
-    public void onError(Throwable throwable) {
-        onError(throwable.getMessage());
+    public void displayError(Throwable throwable) {
+        final String errorMessage = Error.messageIdForThrowable(this, throwable);
+        toast(errorMessage);
     }
 
     @Override
-    public void onError(String errorMessage) {
-        toast(errorMessage);
-        showLoading(false);
+    public void close() {
+        finish();
     }
 
     @LayoutRes
