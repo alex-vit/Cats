@@ -1,7 +1,6 @@
 package com.alexvit.cats.features.list;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.di.component.ActivityComponent;
 import com.alexvit.cats.features.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
 
@@ -34,20 +34,34 @@ public class ListActivity extends BaseActivity<ListPresenter>
     private SwipeRefreshLayout refresh;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+    protected int getLayoutId() {
+        return R.layout.activity_list;
+    }
 
-        bindViews();
+    @Override
+    protected void bindViews() {
+        rvThumbnails = findViewById(R.id.rv_thumbnails);
+
+        refresh = findViewById(R.id.refresh);
+        refresh.setColorSchemeResources(R.color.primary, R.color.accent);
+        refresh.setOnRefreshListener(this::refresh);
+
         initRecycler();
+    }
 
-        buildComponent().inject(this);
-        presenter.attach(this);
+    @Override
+    protected void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 
     @Override
     protected ListPresenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    protected void attach(ListPresenter presenter) {
+        presenter.attach(this);
     }
 
     @Override
@@ -63,15 +77,6 @@ public class ListActivity extends BaseActivity<ListPresenter>
     @Override
     public void onItemClicked(Image image, ImageView shared) {
         launchDetails(image.id, shared);
-    }
-
-    @Override
-    protected void bindViews() {
-        rvThumbnails = findViewById(R.id.rv_thumbnails);
-
-        refresh = findViewById(R.id.refresh);
-        refresh.setColorSchemeResources(R.color.primary, R.color.accent);
-        refresh.setOnRefreshListener(this::refresh);
     }
 
     private void initRecycler() {

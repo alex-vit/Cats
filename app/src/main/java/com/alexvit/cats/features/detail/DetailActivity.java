@@ -18,6 +18,7 @@ import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.api.Image;
 import com.alexvit.cats.data.source.remote.Query;
+import com.alexvit.cats.di.component.ActivityComponent;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -44,7 +45,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
 
         id = getIntent().getStringExtra(KEY_ID);
         if (id == null) {
@@ -52,10 +52,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
             finish();
         }
 
-        bindViews();
-
-        buildComponent().inject(this);
-        presenter.attach(this);
         presenter.setId(id);
     }
 
@@ -81,8 +77,8 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     }
 
     @Override
-    protected DetailPresenter getPresenter() {
-        return presenter;
+    protected int getLayoutId() {
+        return R.layout.activity_detail;
     }
 
     @Override
@@ -94,6 +90,21 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
         ivDown = findViewById(R.id.iv_down);
         ivDown.setOnClickListener(view -> presenter.vote(id, Query.Score.HATE));
+    }
+
+    @Override
+    protected void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
+    protected DetailPresenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected void attach(DetailPresenter presenter) {
+        presenter.attach(this);
     }
 
     @Override
