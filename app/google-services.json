@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "542160681156",
+    "firebase_url": "https://cats-6be2c.firebaseio.com",
+    "project_id": "cats-6be2c",
+    "storage_bucket": "cats-6be2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542160681156:android:874556a1f8774e39",
+        "android_client_info": {
+          "package_name": "com.alexvit.cats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542160681156-0dvvalpgmrb79o7snbhp9flcm3ktsnf9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexvit.cats",
+            "certificate_hash": "2da93f0454729d9b29459697059e1b67446b139e"
+          }
+        },
+        {
+          "client_id": "542160681156-75clcgp4vrm8jau0s86515l5s6tm9kpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBkcK3E0BWQbjG3py2muhDNjcgOwrBW1c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542160681156-75clcgp4vrm8jau0s86515l5s6tm9kpb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
