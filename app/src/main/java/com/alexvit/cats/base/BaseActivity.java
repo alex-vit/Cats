@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.alexvit.cats.App;
 import com.alexvit.cats.di.component.ActivityComponent;
 import com.alexvit.cats.di.component.DaggerActivityComponent;
+import com.alexvit.cats.di.module.ActivityContextModule;
 import com.alexvit.cats.util.Error;
 
 /**
@@ -71,6 +72,7 @@ public abstract class BaseActivity<Presenter extends BasePresenter<? extends Bas
     private ActivityComponent buildComponent() {
         return DaggerActivityComponent.builder()
                 .applicationComponent(App.component(this))
+                .activityContextModule(new ActivityContextModule(this))
                 .build();
     }
 

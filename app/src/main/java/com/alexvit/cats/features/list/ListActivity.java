@@ -1,6 +1,7 @@
 package com.alexvit.cats.features.list;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +14,7 @@ import com.alexvit.cats.data.model.api.Image;
 import com.alexvit.cats.di.component.ActivityComponent;
 import com.alexvit.cats.features.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class ListActivity extends BaseActivity<ListPresenter>
 
     @Inject
     ListPresenter presenter;
+
+    @Inject
+    FirebaseAnalytics analytics;
 
     private ListAdapter adapter;
     private RecyclerView rvThumbnails;
@@ -67,6 +72,7 @@ public class ListActivity extends BaseActivity<ListPresenter>
     @Override
     public void displayImages(List<Image> images) {
         adapter.setImages(images);
+        logViewItemList();
     }
 
     @Override
@@ -99,6 +105,12 @@ public class ListActivity extends BaseActivity<ListPresenter>
 
     private void refresh() {
         presenter.refresh();
+    }
+
+    private void logViewItemList() {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "all");
+        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, params);
     }
 
 }

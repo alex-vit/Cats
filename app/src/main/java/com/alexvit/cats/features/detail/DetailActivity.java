@@ -19,6 +19,7 @@ import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.api.Image;
 import com.alexvit.cats.data.source.remote.Query;
 import com.alexvit.cats.di.component.ActivityComponent;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +38,9 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
     @Inject
     DetailPresenter presenter;
+
+    @Inject
+    FirebaseAnalytics analytics;
 
     private ImageView ivFull;
     private ImageView ivUp;
@@ -129,6 +133,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                         presenter.onError(new ImageLoadingException(image.id));
                     }
                 });
+        logViewItem();
     }
 
     @Override
@@ -187,15 +192,17 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         });
     }
 
+    private void logViewItem() {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, image.id);
+        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params);
+    }
+
     public static final class ImageLoadingException extends Exception {
 
         private final String imageId;
 
-        private ImageLoadingException() {
-            imageId = null;
-        }
-
-        public ImageLoadingException(String imageId) {
+        ImageLoadingException(String imageId) {
             this.imageId = imageId;
         }
 

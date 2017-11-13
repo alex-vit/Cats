@@ -1,5 +1,7 @@
 package com.alexvit.cats.di.component;
 
+import com.alexvit.cats.di.module.ActivityContextModule;
+import com.alexvit.cats.di.module.FirebaseModule;
 import com.alexvit.cats.di.module.PresenterModule;
 import com.alexvit.cats.di.scope.ActivityScope;
 import com.alexvit.cats.features.detail.DetailActivity;
@@ -12,7 +14,10 @@ import dagger.Component;
  */
 
 @ActivityScope
-@Component(modules = {PresenterModule.class}, dependencies = {ApplicationComponent.class})
+@Component(
+        dependencies = {ApplicationComponent.class},
+        modules = {ActivityContextModule.class, PresenterModule.class, FirebaseModule.class}
+)
 public interface ActivityComponent {
 
     void inject(ListActivity listActivity);
