@@ -24,13 +24,6 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
     @Override
     public void setId(String id) {
         subscribe(repository.getImageById(id), view::displayImage);
-
-//        subscribe(repository.getVotes(), map -> {
-//            Integer score = map.get(id);
-//            if (score == null) return;
-//            if (score == 10) view.displayUpvote();
-//            else if (score == 1) view.displayDownvote();
-//        });
     }
 
     @Override
@@ -39,12 +32,15 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
         subscribe(observable,
                 __ -> {
                     view.resetVoteButtons();
-                    if (score == Contract.SCORE_LOVE) {
-                        view.displayUpvote();
-                        view.toastUpvote();
-                    } else if (score == Contract.SCORE_HATE) {
-                        view.displayDownvote();
-                        view.toastDownvote();
+                    switch (score) {
+                        case Contract.SCORE_LOVE:
+                            view.displayUpvote();
+                            view.toastUpvote();
+                            break;
+                        case Contract.SCORE_HATE:
+                            view.displayDownvote();
+                            view.toastDownvote();
+                            break;
                     }
                 });
     }

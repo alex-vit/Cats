@@ -29,9 +29,6 @@ public interface TheCatApiService {
             @Query("sub_id") String subId
     );
 
-    @GET("images/getvotes")
-    Observable<ImageXmlResponse> getVotes();
-
     @GET("images/vote")
     Observable<VoteXmlResponse> vote(
             @Query("image_id") String imageId,

@@ -8,12 +8,10 @@ import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.util.Constants;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -25,11 +23,8 @@ public class CatRepository {
     private final CatRemoteDataSource remote;
     private final SharedPreferences preferences;
 
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    // TODO Make this a Set / Map. Get rid of votes cache
+    // TODO Make this a Set / Map.
     private List<Image> randomImagesCache;
-    private Map<String, Integer> votesCache;
     private String userId;
 
     public CatRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
@@ -73,19 +68,8 @@ public class CatRepository {
         return cacheObs.onErrorResumeNext(remoteObs);
     }
 
-    public Observable<Map<String, Integer>> getVotes() {
-        Observable<Map<String, Integer>> remoteObs = remote.getVotes()
-                .doOnNext(map -> votesCache = map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        return fromNullable(votesCache).onErrorResumeNext(remoteObs);
-    }
-
     public Observable<Vote> vote(String id, int score) {
         return remote.vote(id, score, userId)
-                // invalidate as soon as we attempt to vote, not in onNext
-//                .doOnSubscribe(__ -> votesCache = null)
                 .doOnComplete(() -> updateScoreInCache(randomImagesCache, id, score))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
