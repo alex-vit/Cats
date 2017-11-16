@@ -3,7 +3,7 @@ package com.alexvit.cats.features.detail;
 import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.api.Vote;
-import com.alexvit.cats.data.source.remote.Query;
+import com.alexvit.cats.data.source.remote.Contract;
 import com.alexvit.cats.features.detail.DetailActivity.ImageLoadingException;
 
 import io.reactivex.Observable;
@@ -39,10 +39,10 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
         subscribe(observable,
                 __ -> {
                     view.resetVoteButtons();
-                    if (score == Query.Score.LOVE) {
+                    if (score == Contract.SCORE_LOVE) {
                         view.displayUpvote();
                         view.toastUpvote();
-                    } else if (score == Query.Score.HATE) {
+                    } else if (score == Contract.SCORE_HATE) {
                         view.displayDownvote();
                         view.toastDownvote();
                     }

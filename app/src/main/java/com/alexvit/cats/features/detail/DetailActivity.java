@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.api.Image;
-import com.alexvit.cats.data.source.remote.Query;
+import com.alexvit.cats.data.source.remote.Contract;
 import com.alexvit.cats.di.component.ActivityComponent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
@@ -90,10 +90,10 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         ivFull = findViewById(R.id.iv_full);
 
         ivUp = findViewById(R.id.iv_up);
-        ivUp.setOnClickListener(view -> presenter.vote(id, Query.Score.LOVE));
+        ivUp.setOnClickListener(view -> presenter.vote(id, Contract.SCORE_LOVE));
 
         ivDown = findViewById(R.id.iv_down);
-        ivDown.setOnClickListener(view -> presenter.vote(id, Query.Score.HATE));
+        ivDown.setOnClickListener(view -> presenter.vote(id, Contract.SCORE_HATE));
     }
 
     @Override

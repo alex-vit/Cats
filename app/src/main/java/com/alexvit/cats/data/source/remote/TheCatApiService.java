@@ -1,6 +1,8 @@
 package com.alexvit.cats.data.source.remote;
 
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.alexvit.cats.data.model.api.ImageXmlResponse;
 import com.alexvit.cats.data.model.api.VoteXmlResponse;
@@ -17,9 +19,9 @@ public interface TheCatApiService {
 
     @GET("images/get?format=xml&type=jpg,png")
     Observable<ImageXmlResponse> getImages(
-            @Query("image_id") String imageId,
+            @Query("image_id") @Nullable String imageId,
             @Query("results_per_page") @IntRange(from = 1) Integer resultsPerPage,
-            @Query("size") String size
+            @Query("size") @Contract.Size String size
     );
 
     @GET("images/getvotes")
@@ -27,8 +29,8 @@ public interface TheCatApiService {
 
     @GET("images/vote")
     Observable<VoteXmlResponse> vote(
-            @Query("image_id") String imageId,
-            @Query("score") @IntRange(from = 1, to = 10) int score
+            @Query("image_id") @NonNull String imageId,
+            @Query("score") @Contract.Score int score
     );
 
 }

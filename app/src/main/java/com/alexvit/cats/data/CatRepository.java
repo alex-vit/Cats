@@ -1,7 +1,6 @@
 package com.alexvit.cats.data;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.alexvit.cats.data.model.api.Image;
 import com.alexvit.cats.data.model.api.Vote;
@@ -106,7 +105,6 @@ public class CatRepository {
             userId = UUID.randomUUID().toString();
             saveUserId(preferences, userId);
         }
-        Log.d("Repo", "user id = " + userId);
         return userId;
     }
 
