@@ -10,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by alexander.vitjukov on 16.11.2017.
  */
 
+@SuppressWarnings("WeakerAccess")
 public final class Contract {
 
     private Contract() {
