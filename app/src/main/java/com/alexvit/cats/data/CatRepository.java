@@ -25,8 +25,8 @@ public class CatRepository {
 
     private final CatRemoteDataSource remote;
 
-    private Map<String, Image> randomImagesCache = new LinkedHashMap<>();
-    private String userId;
+    private final Map<String, Image> randomImagesCache = new LinkedHashMap<>();
+    private final String userId;
 
     public CatRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
         this.remote = remote;

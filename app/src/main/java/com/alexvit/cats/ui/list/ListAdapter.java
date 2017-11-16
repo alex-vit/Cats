@@ -19,7 +19,7 @@ import java.util.List;
 
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private List<Image> images = new ArrayList<>();
+    private final List<Image> images = new ArrayList<>();
     private final OnItemClickListener listener;
 
     ListAdapter(OnItemClickListener listener) {
@@ -65,7 +65,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivThumbnail;
+        private final ImageView ivThumbnail;
 
         ViewHolder(View itemView) {
             super(itemView);
