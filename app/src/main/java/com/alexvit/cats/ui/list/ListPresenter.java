@@ -1,8 +1,8 @@
-package com.alexvit.cats.features.list;
+package com.alexvit.cats.ui.list;
 
 import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.util.Constants;
 
 import java.util.List;

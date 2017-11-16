@@ -1,4 +1,4 @@
-package com.alexvit.cats.data.model.api;
+package com.alexvit.cats.data.model;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

@@ -29,10 +29,10 @@ public class InsertApiKeyInterceptor implements Interceptor {
                 .addQueryParameter("api_key", apiKey)
                 .build();
 
-        // Request customization: add request headers
-        Request.Builder requestBuilder = originalRequest.newBuilder().url(url);
+        Request request = originalRequest.newBuilder()
+                .url(url)
+                .build();
 
-        Request request = requestBuilder.build();
         return chain.proceed(request);
     }
 

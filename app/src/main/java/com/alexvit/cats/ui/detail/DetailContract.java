@@ -1,7 +1,7 @@
-package com.alexvit.cats.features.detail;
+package com.alexvit.cats.ui.detail;
 
 import com.alexvit.cats.base.BaseView;
-import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.data.model.Image;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.

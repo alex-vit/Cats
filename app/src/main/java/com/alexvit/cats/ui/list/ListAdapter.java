@@ -1,4 +1,4 @@
-package com.alexvit.cats.features.list;
+package com.alexvit.cats.ui.list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.alexvit.cats.R;
-import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.data.model.Image;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

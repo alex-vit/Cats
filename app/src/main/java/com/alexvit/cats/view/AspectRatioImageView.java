@@ -1,4 +1,4 @@
-package com.alexvit.cats.widgets;
+package com.alexvit.cats.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

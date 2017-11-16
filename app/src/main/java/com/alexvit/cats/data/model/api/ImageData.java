@@ -1,5 +1,7 @@
 package com.alexvit.cats.data.model.api;
 
+import com.alexvit.cats.data.model.Image;
+
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 

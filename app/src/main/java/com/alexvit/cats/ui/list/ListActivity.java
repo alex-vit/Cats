@@ -1,4 +1,4 @@
-package com.alexvit.cats.features.list;
+package com.alexvit.cats.ui.list;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.widget.ImageView;
 
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
-import com.alexvit.cats.data.model.api.Image;
+import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.di.component.ActivityComponent;
-import com.alexvit.cats.features.detail.DetailActivity;
+import com.alexvit.cats.ui.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
 import com.google.firebase.analytics.FirebaseAnalytics;
 

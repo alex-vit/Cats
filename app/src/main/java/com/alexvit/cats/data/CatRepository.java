@@ -2,8 +2,8 @@ package com.alexvit.cats.data;
 
 import android.content.SharedPreferences;
 
-import com.alexvit.cats.data.model.api.Image;
-import com.alexvit.cats.data.model.api.Vote;
+import com.alexvit.cats.data.model.Image;
+import com.alexvit.cats.data.model.Vote;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.util.Constants;
 

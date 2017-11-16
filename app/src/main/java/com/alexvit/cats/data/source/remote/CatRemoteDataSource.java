@@ -1,7 +1,7 @@
 package com.alexvit.cats.data.source.remote;
 
-import com.alexvit.cats.data.model.api.Image;
-import com.alexvit.cats.data.model.api.Vote;
+import com.alexvit.cats.data.model.Image;
+import com.alexvit.cats.data.model.Vote;
 
 import java.util.List;
 

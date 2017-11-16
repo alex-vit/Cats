@@ -1,10 +1,10 @@
-package com.alexvit.cats.features.detail;
+package com.alexvit.cats.ui.detail;
 
 import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.data.model.api.Vote;
+import com.alexvit.cats.data.model.Vote;
 import com.alexvit.cats.data.source.remote.Contract;
-import com.alexvit.cats.features.detail.DetailActivity.ImageLoadingException;
+import com.alexvit.cats.ui.detail.DetailActivity.ImageLoadingException;
 
 import io.reactivex.Observable;
 
