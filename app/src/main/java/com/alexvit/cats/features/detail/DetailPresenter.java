@@ -25,12 +25,12 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
     public void setId(String id) {
         subscribe(repository.getImageById(id), view::displayImage);
 
-        subscribe(repository.getVotes(), map -> {
-            Integer score = map.get(id);
-            if (score == null) return;
-            if (score == 10) view.displayUpvote();
-            else if (score == 1) view.displayDownvote();
-        });
+//        subscribe(repository.getVotes(), map -> {
+//            Integer score = map.get(id);
+//            if (score == null) return;
+//            if (score == 10) view.displayUpvote();
+//            else if (score == 1) view.displayDownvote();
+//        });
     }
 
     @Override

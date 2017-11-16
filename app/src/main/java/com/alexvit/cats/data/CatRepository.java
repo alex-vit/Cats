@@ -27,6 +27,7 @@ public class CatRepository {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    // TODO Make this a Set / Map. Get rid of votes cache
     private List<Image> randomImagesCache;
     private Map<String, Integer> votesCache;
     private String userId;
@@ -44,7 +45,7 @@ public class CatRepository {
 
     public Observable<List<Image>> getRandomImages(int count, boolean forceLoad) {
 
-        final Observable<List<Image>> remoteObs = remote.getRandomImages(count)
+        final Observable<List<Image>> remoteObs = remote.getRandomImages(count, userId)
                 .doOnNext(list -> randomImagesCache = list)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -65,7 +66,7 @@ public class CatRepository {
                 .firstOrError()
                 .toObservable();
 
-        final Observable<Image> remoteObs = remote.getImageById(id)
+        final Observable<Image> remoteObs = remote.getImageById(id, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
@@ -82,9 +83,10 @@ public class CatRepository {
     }
 
     public Observable<Vote> vote(String id, int score) {
-        return remote.vote(id, score)
+        return remote.vote(id, score, userId)
                 // invalidate as soon as we attempt to vote, not in onNext
-                .doOnSubscribe(__ -> votesCache = null)
+//                .doOnSubscribe(__ -> votesCache = null)
+                .doOnComplete(() -> updateScoreInCache(randomImagesCache, id, score))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -97,6 +99,14 @@ public class CatRepository {
                 return nullable;
             }
         });
+    }
+
+    private static void updateScoreInCache(List<Image> cache, String imageId, int score) {
+        for (Image image : cache) {
+            if (image.id.equals(imageId)) {
+                image.score = score;
+            }
+        }
     }
 
     private static String getUserId(SharedPreferences preferences) {

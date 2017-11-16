@@ -22,13 +22,13 @@ public class CatRemoteDataSource {
         this.service = service;
     }
 
-    public Observable<List<Image>> getRandomImages(int count) {
-        return service.getImages(null, count, Contract.SIZE_FULL)
+    public Observable<List<Image>> getRandomImages(int count, String subId) {
+        return service.getImages(count, Contract.SIZE_FULL, subId)
                 .map(response -> response.data.images);
     }
 
-    public Observable<Image> getImageById(String id) {
-        return service.getImages(id, null, Contract.SIZE_FULL)
+    public Observable<Image> getImageById(String id, String subId) {
+        return service.getImageById(id, Contract.SIZE_FULL, subId)
                 .map(response -> response.data.images.get(0));
     }
 
@@ -46,8 +46,8 @@ public class CatRemoteDataSource {
                 });
     }
 
-    public Observable<Vote> vote(String id, int score) {
-        return service.vote(id, score)
+    public Observable<Vote> vote(String id, int score, String subId) {
+        return service.vote(id, score, subId)
                 .map(response -> response.data.votes.get(0));
     }
 }

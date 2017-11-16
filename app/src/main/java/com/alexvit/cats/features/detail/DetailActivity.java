@@ -133,6 +133,14 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                         presenter.onError(new ImageLoadingException(image.id));
                     }
                 });
+        switch (image.score) {
+            case Contract.SCORE_LOVE:
+                displayUpvote();
+                break;
+            case Contract.SCORE_HATE:
+                displayDownvote();
+                break;
+        }
         logViewItem();
     }
 

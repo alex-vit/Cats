@@ -19,4 +19,7 @@ public class Vote {
     @Element
     public String action;
 
+    @Element(name = "sub_id")
+    public String subId;
+
 }
