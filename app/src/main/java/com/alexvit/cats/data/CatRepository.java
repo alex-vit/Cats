@@ -7,7 +7,10 @@ import com.alexvit.cats.data.model.api.Vote;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.util.Constants;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import io.reactivex.Observable;
@@ -21,15 +24,12 @@ import io.reactivex.schedulers.Schedulers;
 public class CatRepository {
 
     private final CatRemoteDataSource remote;
-    private final SharedPreferences preferences;
 
-    // TODO Make this a Set / Map.
-    private List<Image> randomImagesCache;
+    private Map<String, Image> randomImagesCache = new LinkedHashMap<>();
     private String userId;
 
     public CatRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
         this.remote = remote;
-        this.preferences = preferences;
 
         userId = getUserId(preferences);
     }
@@ -41,55 +41,54 @@ public class CatRepository {
     public Observable<List<Image>> getRandomImages(int count, boolean forceLoad) {
 
         final Observable<List<Image>> remoteObs = remote.getRandomImages(count, userId)
-                .doOnNext(list -> randomImagesCache = list)
+                .doOnNext(this::cacheImageList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        if (forceLoad) {
+        if (forceLoad || randomImagesCache.isEmpty()) {
             return remoteObs;
         } else {
-            return fromNullable(randomImagesCache).onErrorResumeNext(remoteObs);
+            final List<Image> imageList = new ArrayList<>(randomImagesCache.values());
+            return Observable.just(imageList);
         }
 
     }
 
     public Observable<Image> getImageById(String id) {
 
-        final Observable<Image> cacheObs = fromNullable(randomImagesCache)
-                .flatMapIterable(v -> v)
-                .filter(image -> image.id.equals(id))
-                .firstOrError()
-                .toObservable();
+        final Image image = randomImagesCache.get(id);
+        if (image != null) {
+            return Observable.just(image);
+        } else {
+            return remote.getImageById(id, userId)
+                    .doOnNext(this::cacheImage)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
 
-        final Observable<Image> remoteObs = remote.getImageById(id, userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        return cacheObs.onErrorResumeNext(remoteObs);
     }
 
     public Observable<Vote> vote(String id, int score) {
         return remote.vote(id, score, userId)
-                .doOnComplete(() -> updateScoreInCache(randomImagesCache, id, score))
+                .doOnComplete(() -> updateScoreInCache(id, score))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private <T> Observable<T> fromNullable(T nullable) {
-        return Observable.fromCallable(() -> {
-            if (nullable == null) {
-                throw new NullPointerException("Item is null");
-            } else {
-                return nullable;
-            }
-        });
+    private void updateScoreInCache(String imageId, int score) {
+        final Image image = randomImagesCache.get(imageId);
+        image.score = score;
+        randomImagesCache.put(imageId, image);
     }
 
-    private static void updateScoreInCache(List<Image> cache, String imageId, int score) {
-        for (Image image : cache) {
-            if (image.id.equals(imageId)) {
-                image.score = score;
-            }
+    private void cacheImage(Image image) {
+        randomImagesCache.put(image.id, image);
+    }
+
+    private void cacheImageList(List<Image> imageList) {
+        randomImagesCache.clear();
+        for (Image image : imageList) {
+            cacheImage(image);
         }
     }
 
