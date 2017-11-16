@@ -12,4 +12,6 @@ public final class Constants {
     public static final String CAT_API_BASE_URL = "http://thecatapi.com/api/";
     public static final int COUNT = 40;
 
+    public static final String PREF_USER_ID = "user-id";
+
 }

@@ -1,6 +1,8 @@
 package com.alexvit.cats.di.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.alexvit.cats.di.qualifier.ApplicationContext;
 import com.alexvit.cats.di.scope.ApplicationScope;
@@ -13,12 +15,18 @@ import dagger.Provides;
  */
 
 @Module
-public class ContextModule {
+public class ApplicationModule {
 
     private final Context context;
 
-    public ContextModule(Context context) {
+    public ApplicationModule(Context context) {
         this.context = context;
+    }
+
+    @Provides
+    @ApplicationScope
+    SharedPreferences sharedPreferences(@ApplicationContext Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Provides
@@ -27,4 +35,5 @@ public class ContextModule {
     Context context() {
         return context;
     }
+
 }

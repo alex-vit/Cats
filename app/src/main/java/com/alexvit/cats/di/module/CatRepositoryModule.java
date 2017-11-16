@@ -1,5 +1,7 @@
 package com.alexvit.cats.di.module;
 
+import android.content.SharedPreferences;
+
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.di.scope.ApplicationScope;
@@ -16,8 +18,8 @@ public class CatRepositoryModule {
 
     @Provides
     @ApplicationScope
-    CatRepository catRepository(CatRemoteDataSource remote) {
-        return new CatRepository(remote);
+    CatRepository catRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
+        return new CatRepository(remote, preferences);
     }
 
 }

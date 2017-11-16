@@ -1,11 +1,16 @@
 package com.alexvit.cats.data;
 
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.alexvit.cats.data.model.api.Image;
 import com.alexvit.cats.data.model.api.Vote;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
+import com.alexvit.cats.util.Constants;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,14 +24,19 @@ import io.reactivex.schedulers.Schedulers;
 public class CatRepository {
 
     private final CatRemoteDataSource remote;
+    private final SharedPreferences preferences;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private List<Image> randomImagesCache;
     private Map<String, Integer> votesCache;
+    private String userId;
 
-    public CatRepository(CatRemoteDataSource remote) {
+    public CatRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
         this.remote = remote;
+        this.preferences = preferences;
+
+        userId = getUserId(preferences);
     }
 
     public Observable<List<Image>> getRandomImages(int count) {
@@ -89,4 +99,21 @@ public class CatRepository {
             }
         });
     }
+
+    private static String getUserId(SharedPreferences preferences) {
+        String userId = preferences.getString(Constants.PREF_USER_ID, null);
+        if (userId == null) {
+            userId = UUID.randomUUID().toString();
+            saveUserId(preferences, userId);
+        }
+        Log.d("Repo", "user id = " + userId);
+        return userId;
+    }
+
+    private static void saveUserId(SharedPreferences preferences, String userId) {
+        preferences.edit()
+                .putString(Constants.PREF_USER_ID, userId)
+                .apply();
+    }
+
 }

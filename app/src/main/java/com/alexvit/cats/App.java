@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.alexvit.cats.di.component.ApplicationComponent;
 import com.alexvit.cats.di.component.DaggerApplicationComponent;
-import com.alexvit.cats.di.module.ContextModule;
+import com.alexvit.cats.di.module.ApplicationModule;
 import com.google.firebase.FirebaseApp;
 
 /**
@@ -21,7 +21,7 @@ public class App extends Application {
         super.onCreate();
 
         component = DaggerApplicationComponent.builder()
-                .contextModule(new ContextModule(this))
+                .applicationModule(new ApplicationModule(this))
                 .build();
 
         initFirebase();
