@@ -50,7 +50,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return (images == null) ? 0 : images.size();
+        return images.size();
     }
 
     void setImages(List<Image> images) {
