@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.data.model.Image;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Image image = getItem(position);
 
-        Picasso.with(holder.itemView.getContext())
+        GlideApp.with(holder.itemView.getContext())
                 .load(image.url)
                 .placeholder(R.drawable.ic_image_24dp)
                 .error(R.drawable.ic_image_24dp)

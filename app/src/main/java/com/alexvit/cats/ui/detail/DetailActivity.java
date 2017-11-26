@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.graphics.Palette;
@@ -14,14 +16,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.data.source.remote.Contract;
 import com.alexvit.cats.di.component.ActivityComponent;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -121,19 +126,22 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         this.image = image;
         setTitle(image.id);
 
-        Picasso.with(this)
+        GlideApp.with(this)
                 .load(image.url)
-                .into(ivFull, new Callback() {
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public void onSuccess() {
-                        applyPalette(((BitmapDrawable) ivFull.getDrawable()).getBitmap());
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        presenter.onError(new ImageLoadingException(image.id));
+                        return false;
                     }
 
                     @Override
-                    public void onError() {
-                        presenter.onError(new ImageLoadingException(image.id));
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        applyPalette(((BitmapDrawable) resource).getBitmap());
+                        return false;
                     }
-                });
+                })
+                .into(ivFull);
 
         switch (image.score) {
             case Contract.SCORE_LOVE:
