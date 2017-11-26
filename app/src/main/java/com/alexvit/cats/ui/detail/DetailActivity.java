@@ -73,7 +73,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 supportFinishAfterTransition();
                 return true;
             case R.id.menu_share:
-                shareText(image.url);
+                shareImage(image.url);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -120,6 +120,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     public void displayImage(Image image) {
         this.image = image;
         setTitle(image.id);
+
         Picasso.with(this)
                 .load(image.url)
                 .into(ivFull, new Callback() {
@@ -133,6 +134,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                         presenter.onError(new ImageLoadingException(image.id));
                     }
                 });
+
         switch (image.score) {
             case Contract.SCORE_LOVE:
                 displayUpvote();
@@ -141,6 +143,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 displayDownvote();
                 break;
         }
+
         logViewItem();
     }
 
@@ -181,10 +184,13 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
-    private void shareText(String text) {
+    private void shareImage(String text) {
+        logShareItem();
+
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
+
         startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
     }
 
@@ -204,6 +210,12 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_ID, image.id);
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params);
+    }
+
+    private void logShareItem() {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, image.id);
+        analytics.logEvent(FirebaseAnalytics.Event.SHARE, params);
     }
 
     public static final class ImageLoadingException extends Exception {
