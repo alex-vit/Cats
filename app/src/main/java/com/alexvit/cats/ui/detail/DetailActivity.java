@@ -61,6 +61,10 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
             finish();
         }
 
+        if (savedInstanceState == null) {
+            logViewItem();
+        }
+
         presenter.setId(id);
     }
 
@@ -152,7 +156,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 break;
         }
 
-        logViewItem();
     }
 
     @Override
@@ -216,13 +219,13 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
     private void logViewItem() {
         Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, image.id);
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, id);
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params);
     }
 
     private void logShareItem() {
         Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, image.id);
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, id);
         analytics.logEvent(FirebaseAnalytics.Event.SHARE, params);
     }
 
