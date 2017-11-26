@@ -72,7 +72,6 @@ public class ListActivity extends BaseActivity<ListPresenter>
     @Override
     public void displayImages(List<Image> images) {
         adapter.setImages(images);
-        logViewItemList();
     }
 
     @Override
@@ -104,10 +103,11 @@ public class ListActivity extends BaseActivity<ListPresenter>
     }
 
     private void refresh() {
-        presenter.refresh();
+        presenter.loadRandomImages(true);
     }
 
-    private void logViewItemList() {
+    @Override
+    public void logViewItemList() {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "all");
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, params);

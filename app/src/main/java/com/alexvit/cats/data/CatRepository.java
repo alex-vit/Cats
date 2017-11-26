@@ -35,23 +35,16 @@ public class CatRepository {
     }
 
     public Observable<List<Image>> getRandomImages(int count) {
-        return getRandomImages(count, false);
-    }
 
-    public Observable<List<Image>> getRandomImages(int count, boolean forceLoad) {
-
-        final Observable<List<Image>> remoteObs = remote.getRandomImages(count, userId)
+        return remote.getRandomImages(count, userId)
                 .doOnNext(this::cacheImageList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        if (forceLoad || randomImagesCache.isEmpty()) {
-            return remoteObs;
-        } else {
-            final List<Image> imageList = new ArrayList<>(randomImagesCache.values());
-            return Observable.just(imageList);
-        }
+    }
 
+    public List<Image> getCachedRandomImages() {
+        return new ArrayList<>(randomImagesCache.values());
     }
 
     public Observable<Image> getImageById(String id) {

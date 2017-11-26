@@ -12,14 +12,14 @@ import java.util.List;
 interface ListContract {
 
     interface Presenter {
-        void loadRandomImages();
-
-        void refresh();
+        void loadRandomImages(boolean refresh);
     }
 
     interface View extends BaseView {
         void displayImages(List<Image> images);
         void showLoading(boolean show);
+
+        void logViewItemList();
     }
 
 }

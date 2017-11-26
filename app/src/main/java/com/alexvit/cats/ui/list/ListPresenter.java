@@ -26,19 +26,25 @@ public class ListPresenter extends BasePresenter<ListContract.View>
     public void attach(ListContract.View view) {
         super.attach(view);
 
-        loadRandomImages();
+        loadRandomImages(false);
     }
 
     @Override
-    public void loadRandomImages() {
-        view.showLoading(true);
-        Observable<List<Image>> observable = repository.getRandomImages(Constants.COUNT);
-        subscribe(observable, view::displayImages);
+    public void loadRandomImages(boolean refresh) {
+
+        final List<Image> cachedImages = repository.getCachedRandomImages();
+
+        if (refresh || cachedImages.isEmpty()) {
+            view.showLoading(true);
+            Observable<List<Image>> observable = repository.getRandomImages(Constants.COUNT);
+            subscribe(observable, images -> {
+                view.displayImages(images);
+                view.logViewItemList();
+            });
+        } else {
+            view.displayImages(cachedImages);
+        }
+
     }
 
-    @Override
-    public void refresh() {
-        Observable<List<Image>> observable = repository.getRandomImages(Constants.COUNT, true);
-        subscribe(observable, view::displayImages);
-    }
 }
