@@ -4,7 +4,6 @@ import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.Vote;
 import com.alexvit.cats.data.source.remote.Contract;
-import com.alexvit.cats.ui.detail.DetailActivity.ImageLoadingException;
 
 import io.reactivex.Observable;
 
@@ -45,12 +44,4 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
                 });
     }
 
-    @Override
-    public void onError(Throwable throwable) {
-        super.onError(throwable);
-
-        if (throwable instanceof ImageLoadingException) {
-            view.close();
-        }
-    }
 }
