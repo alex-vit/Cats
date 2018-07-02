@@ -19,17 +19,21 @@
         <activity
             android:name=".ui.list.ListActivity"
             android:launchMode="singleTop">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity
-            android:name=".ui.detail.DetailActivity"
-            android:label=""
-            android:parentActivityName=".ui.list.ListActivity" />
+                android:name=".ui.detail.DetailActivity"
+                android:parentActivityName=".ui.list.ListActivity"
+                android:label=""
+                android:theme="@style/Details"/>
+
     </application>
 
 </manifest>

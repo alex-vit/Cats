@@ -15,7 +15,6 @@ import android.support.v7.graphics.Palette;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
@@ -54,6 +53,8 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initToolbar();
 
         id = getIntent().getStringExtra(KEY_ID);
         if (id == null) {
@@ -170,8 +171,8 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
     @Override
     public void resetVoteButtons() {
-        setImageViewColor(ivUp, R.color.icons);
-        setImageViewColor(ivDown, R.color.icons);
+        setImageViewColor(ivUp, R.color.white);
+        setImageViewColor(ivDown, R.color.white);
     }
 
     @Override
@@ -188,6 +189,14 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(KEY_ID, id);
         return intent;
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(findViewById(R.id.toolbar));
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setImageViewColor(ImageView imageView, @ColorRes int color) {
