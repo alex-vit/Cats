@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
-
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
@@ -16,9 +15,8 @@ import com.alexvit.cats.ui.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.List;
-
 import javax.inject.Inject;
+import java.util.List;
 
 public class ListActivity extends BaseActivity<ListPresenter>
         implements ListContract.View, ListAdapter.OnItemClickListener {
