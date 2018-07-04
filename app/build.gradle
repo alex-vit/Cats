@@ -1,4 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     compileSdkVersion 27
@@ -65,6 +70,11 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
     implementation "com.google.firebase:firebase-crash:$rootProject.firebaseVersion"
     implementation "com.google.firebase:firebase-perf:$rootProject.firebaseVersion"
+
+    // Crashlytics
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+        transitive = true
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
