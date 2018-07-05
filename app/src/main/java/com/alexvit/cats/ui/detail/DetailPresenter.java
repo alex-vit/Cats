@@ -4,7 +4,6 @@ import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.Vote;
 import com.alexvit.cats.data.source.remote.Contract;
-
 import io.reactivex.Observable;
 
 /**
@@ -33,12 +32,12 @@ public class DetailPresenter extends BasePresenter<DetailContract.View>
                     view.resetVoteButtons();
                     switch (score) {
                         case Contract.SCORE_LOVE:
-                            view.displayUpvote();
-                            view.toastUpvote();
+                            view.displayUpVote();
+                            view.toastUpVote();
                             break;
                         case Contract.SCORE_HATE:
-                            view.displayDownvote();
-                            view.toastDownvote();
+                            view.displayDownVote();
+                            view.toastDownVote();
                             break;
                     }
                 });

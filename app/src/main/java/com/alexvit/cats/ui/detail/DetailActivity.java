@@ -150,22 +150,22 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
         switch (image.score) {
             case Contract.SCORE_LOVE:
-                displayUpvote();
+                displayUpVote();
                 break;
             case Contract.SCORE_HATE:
-                displayDownvote();
+                displayDownVote();
                 break;
         }
 
     }
 
     @Override
-    public void displayUpvote() {
+    public void displayUpVote() {
         setImageViewColor(ivUp, R.color.accent);
     }
 
     @Override
-    public void displayDownvote() {
+    public void displayDownVote() {
         setImageViewColor(ivDown, R.color.accent);
     }
 
@@ -176,12 +176,12 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     }
 
     @Override
-    public void toastUpvote() {
+    public void toastUpVote() {
         toast(R.string.notification_upvoted);
     }
 
     @Override
-    public void toastDownvote() {
+    public void toastDownVote() {
         toast(R.string.notification_downvoted);
     }
 
@@ -216,7 +216,8 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
 
     private void applyPalette(Bitmap bitmap) {
         Palette.from(bitmap).generate(palette -> {
-            int muted = palette.getMutedColor(getResources().getColor(R.color.primary));
+            int defaultColor = ContextCompat.getColor(this, R.color.primary);
+            int muted = palette.getMutedColor(defaultColor);
             int color = palette.getVibrantColor(muted);
             ActionBar bar = getSupportActionBar();
             if (bar != null) {
