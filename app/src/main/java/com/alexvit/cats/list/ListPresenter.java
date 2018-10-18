@@ -1,4 +1,4 @@
-package com.alexvit.cats.ui.list;
+package com.alexvit.cats.list;
 
 import com.alexvit.cats.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;

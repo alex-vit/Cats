@@ -1,4 +1,4 @@
-package com.alexvit.cats.di.module;
+package com.alexvit.cats;
 
 import android.content.Context;
 import android.content.SharedPreferences;

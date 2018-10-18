@@ -17,7 +17,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ui.list.ListActivity"
+            android:name=".list.ListActivity"
             android:launchMode="singleTop">
 
             <intent-filter>
@@ -30,7 +30,7 @@
 
         <activity
                 android:name=".ui.detail.DetailActivity"
-                android:parentActivityName=".ui.list.ListActivity"
+            android:parentActivityName=".list.ListActivity"
                 android:label=""
                 android:theme="@style/Details"/>
 

@@ -2,8 +2,8 @@ package com.alexvit.cats.data.source.remote;
 
 import android.support.annotation.IntRange;
 
+import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.api.ImageXmlResponse;
-import com.alexvit.cats.data.model.api.VoteXmlResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -18,21 +18,14 @@ public interface TheCatApiService {
     @GET("images/get?format=xml&type=jpg,png")
     Observable<ImageXmlResponse> getImages(
             @Query("results_per_page") @IntRange(from = 1) Integer resultsPerPage,
-            @Query("size") @Contract.Size String size,
+            @Query("size") @CatRepository.Size String size,
             @Query("sub_id") String subId
     );
 
     @GET("images/get?format=xml&type=jpg,png")
     Observable<ImageXmlResponse> getImageById(
             @Query("image_id") String imageId,
-            @Query("size") @Contract.Size String size,
-            @Query("sub_id") String subId
-    );
-
-    @GET("images/vote")
-    Observable<VoteXmlResponse> vote(
-            @Query("image_id") String imageId,
-            @Query("score") @Contract.Score int score,
+            @Query("size") @CatRepository.Size String size,
             @Query("sub_id") String subId
     );
 

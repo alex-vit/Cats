@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -15,11 +14,11 @@ import android.support.v7.graphics.Palette;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
-import com.alexvit.cats.data.source.remote.Contract;
 import com.alexvit.cats.di.component.ActivityComponent;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -47,8 +46,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     FirebaseAnalytics analytics;
 
     private ImageView ivFull;
-    private ImageView ivUp;
-    private ImageView ivDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +95,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Override
     protected void bindViews() {
         ivFull = findViewById(R.id.iv_full);
-
-        ivUp = findViewById(R.id.iv_up);
-        ivUp.setOnClickListener(view -> presenter.vote(id, Contract.SCORE_LOVE));
-
-        ivDown = findViewById(R.id.iv_down);
-        ivDown.setOnClickListener(view -> presenter.vote(id, Contract.SCORE_HATE));
-    }
+        }
 
     @Override
     protected void inject(ActivityComponent activityComponent) {
@@ -148,41 +139,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
                 })
                 .into(ivFull);
 
-        switch (image.score) {
-            case Contract.SCORE_LOVE:
-                displayUpVote();
-                break;
-            case Contract.SCORE_HATE:
-                displayDownVote();
-                break;
-        }
-
-    }
-
-    @Override
-    public void displayUpVote() {
-        setImageViewColor(ivUp, R.color.accent);
-    }
-
-    @Override
-    public void displayDownVote() {
-        setImageViewColor(ivDown, R.color.accent);
-    }
-
-    @Override
-    public void resetVoteButtons() {
-        setImageViewColor(ivUp, R.color.white);
-        setImageViewColor(ivDown, R.color.white);
-    }
-
-    @Override
-    public void toastUpVote() {
-        toast(R.string.notification_upvoted);
-    }
-
-    @Override
-    public void toastDownVote() {
-        toast(R.string.notification_downvoted);
     }
 
     public static Intent getIntent(Activity activity, String id) {
@@ -197,11 +153,6 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    private void setImageViewColor(ImageView imageView, @ColorRes int color) {
-        imageView.setColorFilter(ContextCompat.getColor(this, color),
-                android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     private void shareImage(String text) {

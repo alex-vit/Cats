@@ -1,12 +1,16 @@
 package com.alexvit.cats.data;
 
 import android.content.SharedPreferences;
+import android.support.annotation.IntDef;
+import android.support.annotation.StringDef;
 
 import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.data.model.Vote;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.util.Constants;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,6 +26,23 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class CatRepository {
+
+    @StringDef({SIZE_SMALL, SIZE_MEDIUM, SIZE_FULL})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Size {
+    }
+
+    public static final String SIZE_SMALL = "small";
+    public static final String SIZE_MEDIUM = "med";
+    public static final String SIZE_FULL = "full";
+
+    @IntDef({SCORE_LOVE, SCORE_HATE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Score {
+    }
+
+    public static final int SCORE_LOVE = 10;
+    public static final int SCORE_HATE = 1;
 
     private final CatRemoteDataSource remote;
 
@@ -59,13 +80,6 @@ public class CatRepository {
                     .observeOn(AndroidSchedulers.mainThread());
         }
 
-    }
-
-    public Observable<Vote> vote(String id, int score) {
-        return remote.vote(id, score, userId)
-                .doOnComplete(() -> updateScoreInCache(id, score))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private void updateScoreInCache(String imageId, int score) {

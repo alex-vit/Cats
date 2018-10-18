@@ -2,8 +2,8 @@ package com.alexvit.cats.di.module;
 
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.di.scope.ActivityScope;
+import com.alexvit.cats.list.ListPresenter;
 import com.alexvit.cats.ui.detail.DetailPresenter;
-import com.alexvit.cats.ui.list.ListPresenter;
 
 import dagger.Module;
 import dagger.Provides;

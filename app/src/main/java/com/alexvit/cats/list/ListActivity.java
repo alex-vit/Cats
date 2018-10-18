@@ -1,4 +1,4 @@
-package com.alexvit.cats.ui.list;
+package com.alexvit.cats.list;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
+
 import com.alexvit.cats.R;
 import com.alexvit.cats.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
@@ -15,14 +16,12 @@ import com.alexvit.cats.ui.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import javax.inject.Inject;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class ListActivity extends BaseActivity<ListPresenter>
         implements ListContract.View, ListAdapter.OnItemClickListener {
-
-    @SuppressWarnings("unused")
-    private static final String TAG = ListActivity.class.getSimpleName();
 
     private static final int COL_WIDTH = 200;
 

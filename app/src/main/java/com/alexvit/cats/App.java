@@ -2,11 +2,10 @@ package com.alexvit.cats;
 
 import android.app.Application;
 import android.content.Context;
-import com.alexvit.cats.di.component.ApplicationComponent;
-import com.alexvit.cats.di.component.DaggerApplicationComponent;
-import com.alexvit.cats.di.module.ApplicationModule;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
+
 import io.fabric.sdk.android.Fabric;
 
 /**

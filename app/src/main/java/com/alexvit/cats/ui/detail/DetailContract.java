@@ -10,23 +10,15 @@ import com.alexvit.cats.data.model.Image;
 interface DetailContract {
 
     interface Presenter {
+
         void setId(String id);
 
-        void vote(String id, int score);
     }
 
     interface View extends BaseView {
 
         void displayImage(Image image);
 
-        void displayUpVote();
-
-        void displayDownVote();
-        void resetVoteButtons();
-
-        void toastUpVote();
-
-        void toastDownVote();
     }
 
 }

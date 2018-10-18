@@ -1,7 +1,6 @@
-package com.alexvit.cats.di.component;
+package com.alexvit.cats;
 
 import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.di.module.ApplicationModule;
 import com.alexvit.cats.di.module.CatRepositoryModule;
 import com.alexvit.cats.di.scope.ApplicationScope;
 
