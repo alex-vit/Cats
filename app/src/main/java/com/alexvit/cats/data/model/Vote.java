@@ -13,10 +13,10 @@ public class Vote {
     @Element(name = "image_id")
     public String imageId;
 
-    @Element
+    @Element(name = "score")
     public int score;
 
-    @Element
+    @Element(name = "action")
     public String action;
 
     @Element(name = "sub_id")

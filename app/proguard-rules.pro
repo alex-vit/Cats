@@ -19,3 +19,38 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+## Crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+## GMS
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**
+
+## OkHttp3
+-dontwarn okhttp3.**
+-keep class okhttp3.* { *; }
+-keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
+
+## OkIO
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+
+## Simple XML
+-dontwarn javax.xml.stream.**
+
+-keep public class org.simpleframework.** { *; }
+-keep class org.simpleframework.xml.** { *; }
+-keep class org.simpleframework.xml.core.** { *; }
+-keep class org.simpleframework.xml.util.** { *; }
+
+-keepattributes ElementList, Element, Root, *Annotation*, Signature
+
+-keepclassmembers class * {
+    @org.simpleframework.xml.* *;
+}
+
+-keep @org.simpleframework.xml.* class *

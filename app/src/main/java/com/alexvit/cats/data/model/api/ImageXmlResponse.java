@@ -10,7 +10,7 @@ import org.simpleframework.xml.Root;
 @Root(name = "response")
 public class ImageXmlResponse {
 
-    @Element
+    @Element(name = "data")
     public ImageData data;
 
 }

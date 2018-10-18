@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Root(name = "data")
 public class VoteData {
 
-    @ElementList
+    @ElementList(name = "votes")
     public ArrayList<Vote> votes;
 
 }

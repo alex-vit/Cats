@@ -10,10 +10,10 @@ import org.simpleframework.xml.Root;
 @Root
 public class Image {
 
-    @Element
+    @Element(name = "id")
     public String id;
 
-    @Element
+    @Element(name = "url")
     public String url;
 
     @Element(name = "source_url", required = false)

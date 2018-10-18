@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Root(name = "data")
 public class ImageData {
 
-    @ElementList
+    @ElementList(name = "images")
     public ArrayList<Image> images;
 
 }
