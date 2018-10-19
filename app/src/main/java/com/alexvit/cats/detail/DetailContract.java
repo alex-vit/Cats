@@ -1,4 +1,4 @@
-package com.alexvit.cats.ui.detail;
+package com.alexvit.cats.detail;
 
 import com.alexvit.cats.common.base.BaseView;
 import com.alexvit.cats.data.model.Image;

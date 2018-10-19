@@ -1,4 +1,4 @@
-package com.alexvit.cats.ui.detail;
+package com.alexvit.cats.detail;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -100,7 +100,7 @@ public class DetailActivity extends BaseActivity<DetailComponent, DetailPresente
     @Override
     protected DetailComponent getComponent() {
         return DaggerDetailComponent.builder()
-                .applicationComponent(App.component(this))
+                .applicationComponent(App.getComponent())
                 .build();
     }
 

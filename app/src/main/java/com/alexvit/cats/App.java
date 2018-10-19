@@ -1,7 +1,6 @@
 package com.alexvit.cats;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
@@ -14,11 +13,17 @@ import io.fabric.sdk.android.Fabric;
 
 public class App extends Application {
 
+    private static App INSTANCE;
     private ApplicationComponent component;
+
+    public static ApplicationComponent getComponent() {
+        return INSTANCE.component;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
 
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
@@ -26,11 +31,6 @@ public class App extends Application {
 
         initFirebase();
         initFabric();
-    }
-
-    public static ApplicationComponent component(Context context) {
-        App app = (App) context.getApplicationContext();
-        return app.component;
     }
 
     private void initFirebase() {

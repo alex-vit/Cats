@@ -1,4 +1,4 @@
-package com.alexvit.cats.ui.detail;
+package com.alexvit.cats.detail;
 
 import com.alexvit.cats.ApplicationComponent;
 import com.alexvit.cats.common.base.BaseComponent;

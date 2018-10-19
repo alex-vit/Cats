@@ -1,4 +1,4 @@
-package com.alexvit.cats.ui.detail;
+package com.alexvit.cats.detail;
 
 import com.alexvit.cats.common.di.scope.ActivityScope;
 import com.alexvit.cats.data.CatRepository;
