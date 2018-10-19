@@ -8,10 +8,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
+import com.alexvit.cats.App;
 import com.alexvit.cats.R;
-import com.alexvit.cats.base.BaseActivity;
+import com.alexvit.cats.common.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
-import com.alexvit.cats.di.component.ActivityComponent;
 import com.alexvit.cats.ui.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ListActivity extends BaseActivity<ListPresenter>
+public class ListActivity extends BaseActivity<ListComponent, ListPresenter>
         implements ListContract.View, ListAdapter.OnItemClickListener {
 
     private static final int COL_WIDTH = 200;
@@ -52,8 +52,15 @@ public class ListActivity extends BaseActivity<ListPresenter>
     }
 
     @Override
-    protected void inject(ActivityComponent activityComponent) {
-        activityComponent.inject(this);
+    protected ListComponent getComponent() {
+        return DaggerListComponent.builder()
+                .applicationComponent(App.component(this))
+                .build();
+    }
+
+    @Override
+    protected void inject(ListComponent component) {
+        component.inject(this);
     }
 
     @Override

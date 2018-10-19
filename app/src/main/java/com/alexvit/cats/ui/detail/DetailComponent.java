@@ -1,4 +1,4 @@
-package com.alexvit.cats.list;
+package com.alexvit.cats.ui.detail;
 
 import com.alexvit.cats.ApplicationComponent;
 import com.alexvit.cats.common.base.BaseComponent;
@@ -9,10 +9,10 @@ import dagger.Component;
 @ActivityScope
 @Component(
         dependencies = {ApplicationComponent.class},
-        modules = {ListModule.class}
+        modules = {DetailModule.class}
 )
-public interface ListComponent extends BaseComponent {
+interface DetailComponent extends BaseComponent {
 
-    void inject(ListActivity listActivity);
+    void inject(DetailActivity detailActivity);
 
 }

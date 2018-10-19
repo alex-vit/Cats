@@ -15,11 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.alexvit.cats.App;
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
-import com.alexvit.cats.base.BaseActivity;
+import com.alexvit.cats.common.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
-import com.alexvit.cats.di.component.ActivityComponent;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -28,7 +28,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import javax.inject.Inject;
 
-public class DetailActivity extends BaseActivity<DetailPresenter>
+public class DetailActivity extends BaseActivity<DetailComponent, DetailPresenter>
         implements DetailContract.View {
 
     @SuppressWarnings("unused")
@@ -95,11 +95,18 @@ public class DetailActivity extends BaseActivity<DetailPresenter>
     @Override
     protected void bindViews() {
         ivFull = findViewById(R.id.iv_full);
-        }
+    }
 
     @Override
-    protected void inject(ActivityComponent activityComponent) {
-        activityComponent.inject(this);
+    protected DetailComponent getComponent() {
+        return DaggerDetailComponent.builder()
+                .applicationComponent(App.component(this))
+                .build();
+    }
+
+    @Override
+    protected void inject(DetailComponent component) {
+        component.inject(this);
     }
 
     @Override

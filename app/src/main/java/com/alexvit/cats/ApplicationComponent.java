@@ -1,8 +1,9 @@
 package com.alexvit.cats;
 
+import com.alexvit.cats.common.di.module.CatRepositoryModule;
+import com.alexvit.cats.common.di.scope.ApplicationScope;
 import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.di.module.CatRepositoryModule;
-import com.alexvit.cats.di.scope.ApplicationScope;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import dagger.Component;
 
@@ -15,5 +16,7 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     CatRepository catRepository();
+
+    FirebaseAnalytics firebaseAnalytics();
 
 }

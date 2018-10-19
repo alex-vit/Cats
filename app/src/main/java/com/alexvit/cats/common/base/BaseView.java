@@ -1,4 +1,4 @@
-package com.alexvit.cats.base;
+package com.alexvit.cats.common.base;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.

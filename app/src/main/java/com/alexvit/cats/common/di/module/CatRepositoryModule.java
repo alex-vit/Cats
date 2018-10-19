@@ -1,17 +1,16 @@
-package com.alexvit.cats.di.module;
+package com.alexvit.cats.common.di.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alexvit.cats.BuildConfig;
+import com.alexvit.cats.common.di.qualifier.ApiKey;
+import com.alexvit.cats.common.di.qualifier.CacheFile;
+import com.alexvit.cats.common.di.scope.ApplicationScope;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.data.source.remote.InsertApiKeyInterceptor;
 import com.alexvit.cats.data.source.remote.TheCatApiService;
-import com.alexvit.cats.di.qualifier.ApiKey;
-import com.alexvit.cats.di.qualifier.ApplicationContext;
-import com.alexvit.cats.di.qualifier.CacheFile;
-import com.alexvit.cats.di.scope.ApplicationScope;
 import com.alexvit.cats.util.Constants;
 
 import java.io.File;
@@ -83,7 +82,7 @@ public class CatRepositoryModule {
     @Provides
     @ApplicationScope
     @CacheFile
-    File cacheFile(@ApplicationContext Context context) {
+    File cacheFile(Context context) {
         return new File(context.getCacheDir(), "okhttp-cache");
     }
 

@@ -1,10 +1,7 @@
 package com.alexvit.cats.ui.detail;
 
-import com.alexvit.cats.base.BasePresenter;
+import com.alexvit.cats.common.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.data.model.Vote;
-
-import io.reactivex.Observable;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.

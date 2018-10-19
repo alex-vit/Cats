@@ -1,4 +1,4 @@
-package com.alexvit.cats.base;
+package com.alexvit.cats.common.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -7,17 +7,13 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.alexvit.cats.App;
-import com.alexvit.cats.di.component.ActivityComponent;
-import com.alexvit.cats.di.component.DaggerActivityComponent;
-import com.alexvit.cats.di.module.ActivityContextModule;
 import com.alexvit.cats.util.Error;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-public abstract class BaseActivity<Presenter extends BasePresenter<? extends BaseView>>
+public abstract class BaseActivity<Component extends BaseComponent, Presenter extends BasePresenter<? extends BaseView>>
         extends AppCompatActivity
         implements BaseView {
 
@@ -27,9 +23,7 @@ public abstract class BaseActivity<Presenter extends BasePresenter<? extends Bas
 
         setContentView(getLayoutId());
         bindViews();
-
-        inject(buildComponent());
-
+        inject(getComponent());
         attach(getPresenter());
     }
 
@@ -55,7 +49,9 @@ public abstract class BaseActivity<Presenter extends BasePresenter<? extends Bas
 
     protected abstract void bindViews();
 
-    protected abstract void inject(ActivityComponent activityComponent);
+    protected abstract Component getComponent();
+
+    protected abstract void inject(Component component);
 
     protected abstract Presenter getPresenter();
 
@@ -67,13 +63,6 @@ public abstract class BaseActivity<Presenter extends BasePresenter<? extends Bas
 
     protected void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private ActivityComponent buildComponent() {
-        return DaggerActivityComponent.builder()
-                .applicationComponent(App.component(this))
-                .activityContextModule(new ActivityContextModule(this))
-                .build();
     }
 
 }

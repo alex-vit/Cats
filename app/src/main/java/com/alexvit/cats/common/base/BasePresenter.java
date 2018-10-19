@@ -1,4 +1,4 @@
-package com.alexvit.cats.base;
+package com.alexvit.cats.common.base;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;

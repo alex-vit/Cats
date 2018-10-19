@@ -1,4 +1,4 @@
-package com.alexvit.cats.di.qualifier;
+package com.alexvit.cats.common.di.qualifier;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,5 +11,5 @@ import javax.inject.Qualifier;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ApplicationContext {
+public @interface CacheFile {
 }

@@ -1,6 +1,6 @@
 package com.alexvit.cats.list;
 
-import com.alexvit.cats.base.BasePresenter;
+import com.alexvit.cats.common.base.BasePresenter;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.util.Constants;
