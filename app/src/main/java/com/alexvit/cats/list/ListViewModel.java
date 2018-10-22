@@ -1,13 +1,12 @@
 package com.alexvit.cats.list;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.alexvit.cats.common.Analytics;
+import com.alexvit.cats.Analytics;
 import com.alexvit.cats.common.base.BaseViewModel;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.model.Image;
@@ -23,8 +22,8 @@ class ListViewModel extends BaseViewModel<ListViewModel.State> {
         this.catRepository = catRepository;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    public void onStart() {
+    @Override
+    protected void onStart() {
         loadImages();
     }
 
@@ -39,14 +38,16 @@ class ListViewModel extends BaseViewModel<ListViewModel.State> {
     }
 
     void refresh() {
-        loadImages();
+        subscribe(catRepository.fetchRandomImages(), this::onImages);
     }
 
     private void loadImages() {
-        subscribe(catRepository.getRandomImages(), images -> {
-            setState(State.images(images));
-            Analytics.viewItemList();
-        });
+        subscribe(catRepository.getRandomImages(), this::onImages);
+    }
+
+    private void onImages(List<Image> images) {
+        setState(State.images(images));
+        Analytics.itemListView();
     }
 
     enum Error {

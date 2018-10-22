@@ -3,8 +3,11 @@ package com.alexvit.cats.detail;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.graphics.Palette;
@@ -13,25 +16,35 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.alexvit.cats.App;
+import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.common.base.BaseActivity;
+import com.alexvit.cats.common.rx.ActivityModule;
+import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
+import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
+import com.alexvit.cats.common.traits.HasComponent;
+import com.alexvit.cats.common.traits.HasViewModel;
 import com.alexvit.cats.data.model.Image;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.alexvit.cats.detail.DetailViewModel.State;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import javax.inject.Inject;
 
-public class DetailActivity extends BaseActivity {
-
-    @SuppressWarnings("unused")
-    private static final String TAG = DetailActivity.class.getSimpleName();
+public class DetailActivity extends BaseActivity implements
+        HasComponent<DetailComponent>,
+        HasViewModel<DetailViewModel> {
 
     private static final String KEY_ID = "KEY_ID";
 
-    private String id;
-    private Image image;
-
+    private final LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
+            UnsubscribeOn.PAUSE);
     @Inject
-    FirebaseAnalytics analytics;
+    DetailViewModel viewModel;
+
+    private Image image;
 
     private ImageView ivFull;
 
@@ -39,19 +52,13 @@ public class DetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initToolbar();
-
-        id = getIntent().getStringExtra(KEY_ID);
-        if (id == null) {
-            toast("No ID was given.");
-            finish();
+        String id = getIntent().getStringExtra(KEY_ID);
+        if (id != null) {
+            viewModel.load(id);
+        } else {
+            throw new IllegalArgumentException("No ID was given.");
         }
 
-        if (savedInstanceState == null) {
-            logViewItem();
-        }
-
-//        presenter.setId(id);
     }
 
     @Override
@@ -81,60 +88,47 @@ public class DetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void bindViews() {
+    protected void setupViews() {
+        initToolbar();
         ivFull = findViewById(R.id.iv_full);
     }
 
-    //    @Override
-    protected DetailComponent buildComponent() {
+    @Override
+    public DetailComponent buildComponent() {
         return DaggerDetailComponent.builder()
                 .applicationComponent(App.getComponent())
+                .activityModule(new ActivityModule(this))
                 .build();
     }
 
-//    @Override
-//    protected void inject(DetailComponent component) {
-//        component.inject(this);
-//    }
-//
-//    @Override
-//    protected DetailPresenter getPresenter() {
-//        return presenter;
-//    }
-//
-//    @Override
-//    protected void attach(DetailPresenter presenter) {
-//        presenter.attach(this);
-//    }
-//
-//    @Override
-//    public void showLoading(boolean isLoading) {
-//
-//    }
+    @Override
+    public void inject(DetailComponent component) {
+        component.inject(this);
+    }
 
-//    @Override
-//    public void displayImage(Image image) {
-//        this.image = image;
-//        setTitle(image.id);
-//
-//        GlideApp.with(this)
-//                .load(image.url)
-//                .listener(new RequestListener<Drawable>() {
-//                    @Override
-//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-//                        presenter.onError(new ImageLoadingException(image.id));
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                        applyPalette(((BitmapDrawable) resource).getBitmap());
-//                        return false;
-//                    }
-//                })
-//                .into(ivFull);
-//
-//    }
+    @Override
+    public void onError(Throwable throwable) {
+
+    }
+
+    @Override
+    public LifecycleCompositeDisposable getSubs() {
+        return subs;
+    }
+
+    @Override
+    public DetailViewModel getViewModel() {
+        return viewModel;
+    }
+
+    @Override
+    public void observe(DetailViewModel viewModel) {
+        subscribe(viewModel.getState(), this::onState);
+    }
+
+    private void onState(State state) {
+        if (state.image != null) displayImage(image);
+    }
 
     public static Intent getIntent(Activity activity, String id) {
         Intent intent = new Intent(activity, DetailActivity.class);
@@ -150,9 +144,27 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
-    private void shareImage(String text) {
-        logShareItem();
+    private void displayImage(Image image) {
+        this.image = image;
+        setTitle(image.id);
+        GlideApp.with(this)
+                .load(image.url)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        applyPalette(((BitmapDrawable) resource).getBitmap());
+                        return false;
+                    }
+                })
+                .into(ivFull);
+    }
+
+    private void shareImage(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
@@ -171,32 +183,6 @@ public class DetailActivity extends BaseActivity {
                 getWindow().setStatusBarColor(color);
             }
         });
-    }
-
-    private void logViewItem() {
-        Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, params);
-    }
-
-    private void logShareItem() {
-        Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-        analytics.logEvent(FirebaseAnalytics.Event.SHARE, params);
-    }
-
-    public static final class ImageLoadingException extends Exception {
-
-        private final String imageId;
-
-        ImageLoadingException(String imageId) {
-            this.imageId = imageId;
-        }
-
-        @Override
-        public String getMessage() {
-            return "Failed to load image " + imageId;
-        }
     }
 
 }

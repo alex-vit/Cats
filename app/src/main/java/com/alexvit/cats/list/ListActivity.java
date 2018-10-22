@@ -18,7 +18,6 @@ import com.alexvit.cats.common.traits.HasViewModel;
 import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
 
@@ -32,13 +31,10 @@ public class ListActivity extends BaseActivity implements
     private static final int COL_WIDTH = 200;
 
     @Inject
-    FirebaseAnalytics analytics;
-
-    @Inject
     ListViewModel viewModel;
 
     private ListAdapter adapter;
-    private RecyclerView rvThumbnails;
+    private RecyclerView thumbnails;
     private SwipeRefreshLayout refresh;
 
     private LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
@@ -50,8 +46,8 @@ public class ListActivity extends BaseActivity implements
     }
 
     @Override
-    protected void bindViews() {
-        rvThumbnails = findViewById(R.id.rv_thumbnails);
+    protected void setupViews() {
+        thumbnails = findViewById(R.id.rv_thumbnails);
 
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.primary, R.color.accent);
@@ -113,10 +109,10 @@ public class ListActivity extends BaseActivity implements
 
     private void initRecycler() {
         adapter = new ListAdapter(this);
-        rvThumbnails.setAdapter(adapter);
+        thumbnails.setAdapter(adapter);
 
         int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
-        rvThumbnails.setLayoutManager(new GridLayoutManager(
+        thumbnails.setLayoutManager(new GridLayoutManager(
                 this, columns, GridLayoutManager.VERTICAL, false));
     }
 

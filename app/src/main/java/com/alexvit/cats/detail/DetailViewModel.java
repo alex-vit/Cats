@@ -1,4 +1,83 @@
 package com.alexvit.cats.detail;
 
-public class DetailViewModel {
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.alexvit.cats.common.base.BaseViewModel;
+import com.alexvit.cats.data.CatRepository;
+import com.alexvit.cats.data.model.Image;
+
+class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
+
+    private final CatRepository repository;
+
+    DetailViewModel(Lifecycle lifecycle, CatRepository repository) {
+        super(lifecycle);
+        this.repository = repository;
+    }
+
+    @Override
+    protected State defaultState() {
+        return State.loading();
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        setState(State.error(Error.UNKNOWN));
+    }
+
+    void load(String id) {
+        subscribe(repository.getImageById(id), image -> setState(State.image(image)));
+    }
+
+    enum Error {
+        UNKNOWN
+    }
+
+    static class Factory extends ViewModelProvider.NewInstanceFactory {
+
+        private final Lifecycle lifecycle;
+        private final CatRepository catRepository;
+
+        Factory(Lifecycle lifecycle, CatRepository catRepository) {
+            this.lifecycle = lifecycle;
+            this.catRepository = catRepository;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            //noinspection unchecked
+            return (T) new DetailViewModel(lifecycle, catRepository);
+        }
+    }
+
+    static class State {
+
+        @Nullable
+        final Image image;
+        @Nullable
+        final Error error;
+
+        private State(@Nullable Image image, @Nullable Error error) {
+            this.image = image;
+            this.error = error;
+        }
+
+        static State loading() {
+            return new State(null, null);
+        }
+
+        static State image(Image image) {
+            return new State(image, null);
+        }
+
+        static State error(Error error) {
+            return new State(null, error);
+        }
+
+    }
 }

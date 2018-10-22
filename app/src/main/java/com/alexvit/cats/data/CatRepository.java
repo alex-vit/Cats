@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringDef;
 
+import com.alexvit.cats.common.rx.Observables;
 import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.util.Constants;
@@ -46,6 +47,8 @@ public class CatRepository {
 
     private final String userId;
 
+    private List<Image> images = null;
+
     public CatRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
         this.remote = remote;
 
@@ -53,7 +56,13 @@ public class CatRepository {
     }
 
     public Observable<List<Image>> getRandomImages() {
-        return remote.getRandomImages(DEFAULT_IMAGE_COUNT, userId).compose(schedulers());
+        return Observables.fromNullable(images).onErrorResumeNext(fetchRandomImages());
+    }
+
+    public Observable<List<Image>> fetchRandomImages() {
+        return remote.getRandomImages(DEFAULT_IMAGE_COUNT, userId)
+                .compose(schedulers())
+                .doOnNext(i -> images = i);
     }
 
     public Observable<Image> getImageById(String id) {

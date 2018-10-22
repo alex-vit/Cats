@@ -27,7 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             ((HasComponent) this).inject(baseComponent);
         }
 
-        bindViews();
+        setupViews();
 
     }
 
@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @LayoutRes
     protected abstract int getLayoutId();
 
-    protected abstract void bindViews();
+    protected abstract void setupViews();
 
     protected void toast(@StringRes int stringRes) {
         toast(getString(stringRes));

@@ -2,6 +2,7 @@ package com.alexvit.cats.common.base;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ViewModel;
 
 import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
@@ -23,12 +24,19 @@ public abstract class BaseViewModel<State> extends ViewModel implements Lifecycl
         lifecycle.addObserver(this);
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public final void onStart_() {
+        onStart();
+    }
+
     @Override
     public LifecycleCompositeDisposable getSubs() {
         return subs;
     }
 
     protected abstract State defaultState();
+
+    protected void onStart() {}
 
     public Observable<State> getState() {
         return state.toFlowable(BackpressureStrategy.LATEST).toObservable();
