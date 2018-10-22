@@ -5,21 +5,17 @@ import android.support.annotation.IntDef;
 import android.support.annotation.StringDef;
 
 import com.alexvit.cats.data.model.Image;
-import com.alexvit.cats.data.model.Vote;
 import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
 import com.alexvit.cats.util.Constants;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+
+import static com.alexvit.cats.common.rx.Transformers.schedulers;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
@@ -44,9 +40,10 @@ public class CatRepository {
     public static final int SCORE_LOVE = 10;
     public static final int SCORE_HATE = 1;
 
+    private static final int DEFAULT_IMAGE_COUNT = 20;
+
     private final CatRemoteDataSource remote;
 
-    private final Map<String, Image> randomImagesCache = new LinkedHashMap<>();
     private final String userId;
 
     public CatRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
@@ -55,48 +52,12 @@ public class CatRepository {
         userId = getUserId(preferences);
     }
 
-    public Observable<List<Image>> getRandomImages(int count) {
-
-        return remote.getRandomImages(count, userId)
-                .doOnNext(this::cacheImageList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-    }
-
-    public List<Image> getCachedRandomImages() {
-        return new ArrayList<>(randomImagesCache.values());
+    public Observable<List<Image>> getRandomImages() {
+        return remote.getRandomImages(DEFAULT_IMAGE_COUNT, userId).compose(schedulers());
     }
 
     public Observable<Image> getImageById(String id) {
-
-        final Image image = randomImagesCache.get(id);
-        if (image != null) {
-            return Observable.just(image);
-        } else {
-            return remote.getImageById(id, userId)
-                    .doOnNext(this::cacheImage)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-        }
-
-    }
-
-    private void updateScoreInCache(String imageId, int score) {
-        final Image image = randomImagesCache.get(imageId);
-        image.score = score;
-        randomImagesCache.put(imageId, image);
-    }
-
-    private void cacheImage(Image image) {
-        randomImagesCache.put(image.id, image);
-    }
-
-    private void cacheImageList(List<Image> imageList) {
-        randomImagesCache.clear();
-        for (Image image : imageList) {
-            cacheImage(image);
-        }
+        return remote.getImageById(id, userId).compose(schedulers());
     }
 
     private static String getUserId(SharedPreferences preferences) {

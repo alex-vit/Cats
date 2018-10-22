@@ -7,55 +7,45 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.alexvit.cats.util.Error;
+import com.alexvit.cats.common.traits.HasComponent;
+import com.alexvit.cats.common.traits.HasViewModel;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-public abstract class BaseActivity<Component extends BaseComponent, Presenter extends BasePresenter<? extends BaseView>>
-        extends AppCompatActivity
-        implements BaseView {
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(getLayoutId());
+
+        if (this instanceof HasComponent<?>) {
+            BaseComponent baseComponent = ((HasComponent<?>) this).buildComponent();
+            //noinspection unchecked
+            ((HasComponent) this).inject(baseComponent);
+        }
+
         bindViews();
-        inject(getComponent());
-        attach(getPresenter());
+
     }
 
     @Override
-    protected void onStop() {
-        getPresenter().stop();
-        super.onStop();
-    }
+    protected void onResume() {
+        super.onResume();
 
-    @Override
-    public void displayError(Throwable throwable) {
-        final String errorMessage = Error.messageIdForThrowable(this, throwable);
-        toast(errorMessage);
-    }
-
-    @Override
-    public void close() {
-        finish();
+        if (this instanceof HasViewModel<?>) {
+            BaseViewModel viewModel = ((HasViewModel<?>) this).getViewModel();
+            //noinspection unchecked
+            ((HasViewModel) this).observe(viewModel);
+        }
     }
 
     @LayoutRes
     protected abstract int getLayoutId();
 
     protected abstract void bindViews();
-
-    protected abstract Component getComponent();
-
-    protected abstract void inject(Component component);
-
-    protected abstract Presenter getPresenter();
-
-    protected abstract void attach(Presenter presenter);
 
     protected void toast(@StringRes int stringRes) {
         toast(getString(stringRes));

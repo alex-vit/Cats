@@ -3,11 +3,8 @@ package com.alexvit.cats.detail;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.graphics.Palette;
@@ -16,20 +13,14 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.alexvit.cats.App;
-import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.common.base.BaseActivity;
 import com.alexvit.cats.data.model.Image;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import javax.inject.Inject;
 
-public class DetailActivity extends BaseActivity<DetailComponent, DetailPresenter>
-        implements DetailContract.View {
+public class DetailActivity extends BaseActivity {
 
     @SuppressWarnings("unused")
     private static final String TAG = DetailActivity.class.getSimpleName();
@@ -38,9 +29,6 @@ public class DetailActivity extends BaseActivity<DetailComponent, DetailPresente
 
     private String id;
     private Image image;
-
-    @Inject
-    DetailPresenter presenter;
 
     @Inject
     FirebaseAnalytics analytics;
@@ -63,7 +51,7 @@ public class DetailActivity extends BaseActivity<DetailComponent, DetailPresente
             logViewItem();
         }
 
-        presenter.setId(id);
+//        presenter.setId(id);
     }
 
     @Override
@@ -97,56 +85,56 @@ public class DetailActivity extends BaseActivity<DetailComponent, DetailPresente
         ivFull = findViewById(R.id.iv_full);
     }
 
-    @Override
-    protected DetailComponent getComponent() {
+    //    @Override
+    protected DetailComponent buildComponent() {
         return DaggerDetailComponent.builder()
                 .applicationComponent(App.getComponent())
                 .build();
     }
 
-    @Override
-    protected void inject(DetailComponent component) {
-        component.inject(this);
-    }
+//    @Override
+//    protected void inject(DetailComponent component) {
+//        component.inject(this);
+//    }
+//
+//    @Override
+//    protected DetailPresenter getPresenter() {
+//        return presenter;
+//    }
+//
+//    @Override
+//    protected void attach(DetailPresenter presenter) {
+//        presenter.attach(this);
+//    }
+//
+//    @Override
+//    public void showLoading(boolean isLoading) {
+//
+//    }
 
-    @Override
-    protected DetailPresenter getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    protected void attach(DetailPresenter presenter) {
-        presenter.attach(this);
-    }
-
-    @Override
-    public void showLoading(boolean isLoading) {
-
-    }
-
-    @Override
-    public void displayImage(Image image) {
-        this.image = image;
-        setTitle(image.id);
-
-        GlideApp.with(this)
-                .load(image.url)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        presenter.onError(new ImageLoadingException(image.id));
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        applyPalette(((BitmapDrawable) resource).getBitmap());
-                        return false;
-                    }
-                })
-                .into(ivFull);
-
-    }
+//    @Override
+//    public void displayImage(Image image) {
+//        this.image = image;
+//        setTitle(image.id);
+//
+//        GlideApp.with(this)
+//                .load(image.url)
+//                .listener(new RequestListener<Drawable>() {
+//                    @Override
+//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                        presenter.onError(new ImageLoadingException(image.id));
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                        applyPalette(((BitmapDrawable) resource).getBitmap());
+//                        return false;
+//                    }
+//                })
+//                .into(ivFull);
+//
+//    }
 
     public static Intent getIntent(Activity activity, String id) {
         Intent intent = new Intent(activity, DetailActivity.class);

@@ -1,7 +1,6 @@
 package com.alexvit.cats.list;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +10,11 @@ import android.widget.ImageView;
 import com.alexvit.cats.App;
 import com.alexvit.cats.R;
 import com.alexvit.cats.common.base.BaseActivity;
+import com.alexvit.cats.common.rx.ActivityModule;
+import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
+import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
+import com.alexvit.cats.common.traits.HasComponent;
+import com.alexvit.cats.common.traits.HasViewModel;
 import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.detail.DetailActivity;
 import com.alexvit.cats.util.Screen;
@@ -20,13 +24,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ListActivity extends BaseActivity<ListComponent, ListPresenter>
-        implements ListContract.View, ListAdapter.OnItemClickListener {
+public class ListActivity extends BaseActivity implements
+        HasComponent<ListComponent>,
+        HasViewModel<ListViewModel>,
+        ListAdapter.OnItemClickListener {
 
     private static final int COL_WIDTH = 200;
-
-    @Inject
-    ListPresenter presenter;
 
     @Inject
     FirebaseAnalytics analytics;
@@ -37,6 +40,9 @@ public class ListActivity extends BaseActivity<ListComponent, ListPresenter>
     private ListAdapter adapter;
     private RecyclerView rvThumbnails;
     private SwipeRefreshLayout refresh;
+
+    private LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
+            UnsubscribeOn.PAUSE);
 
     @Override
     protected int getLayoutId() {
@@ -49,47 +55,60 @@ public class ListActivity extends BaseActivity<ListComponent, ListPresenter>
 
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.primary, R.color.accent);
-        refresh.setOnRefreshListener(this::refresh);
+        refresh.setOnRefreshListener(viewModel::refresh);
 
         initRecycler();
     }
 
     @Override
-    protected ListComponent getComponent() {
+    public ListComponent buildComponent() {
         return DaggerListComponent.builder()
                 .applicationComponent(App.getComponent())
-                .listModule(new ListModule(this))
+                .activityModule(new ActivityModule(this))
                 .build();
     }
 
     @Override
-    protected void inject(ListComponent component) {
+    public void inject(ListComponent component) {
         component.inject(this);
     }
 
     @Override
-    protected ListPresenter getPresenter() {
-        return presenter;
+    public void onError(Throwable throwable) {
+
     }
 
     @Override
-    protected void attach(ListPresenter presenter) {
-        presenter.attach(this);
+    public LifecycleCompositeDisposable getSubs() {
+        return subs;
     }
 
     @Override
-    public void displayImages(List<Image> images) {
-        adapter.setImages(images);
+    public ListViewModel getViewModel() {
+        return viewModel;
     }
 
     @Override
-    public void showLoading(boolean isLoading) {
-        refresh.setRefreshing(isLoading);
+    public void observe(ListViewModel viewModel) {
+        subscribe(viewModel.getState(), this::onState);
     }
 
     @Override
     public void onItemClicked(Image image, ImageView shared) {
         launchDetails(image.id, shared);
+    }
+
+    private void onState(ListViewModel.State state) {
+        showLoading(state.loading);
+        if (state.images != null) displayImages(state.images);
+    }
+
+    private void showLoading(boolean isLoading) {
+        refresh.setRefreshing(isLoading);
+    }
+
+    private void displayImages(List<Image> images) {
+        adapter.setImages(images);
     }
 
     private void initRecycler() {
@@ -108,17 +127,6 @@ public class ListActivity extends BaseActivity<ListComponent, ListPresenter>
                 this, shared, "cat_image");
 
         startActivity(intent, options.toBundle());
-    }
-
-    private void refresh() {
-        presenter.loadRandomImages(true);
-    }
-
-    @Override
-    public void logViewItemList() {
-        Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "all");
-        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, params);
     }
 
 }
