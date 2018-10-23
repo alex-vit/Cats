@@ -19,12 +19,12 @@ import com.alexvit.cats.App;
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
 import com.alexvit.cats.common.base.BaseActivity;
+import com.alexvit.cats.common.data.Image;
 import com.alexvit.cats.common.rx.ActivityModule;
 import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
 import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
 import com.alexvit.cats.common.traits.HasComponent;
 import com.alexvit.cats.common.traits.HasViewModel;
-import com.alexvit.cats.data.model.Image;
 import com.alexvit.cats.detail.DetailViewModel.State;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -64,7 +64,7 @@ public class DetailActivity extends BaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
@@ -127,7 +127,7 @@ public class DetailActivity extends BaseActivity implements
     }
 
     private void onState(State state) {
-        if (state.image != null) displayImage(image);
+        if (state.image != null) displayImage(state.image);
     }
 
     public static Intent getIntent(Activity activity, String id) {

@@ -7,14 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.alexvit.cats.common.base.BaseViewModel;
-import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.data.model.Image;
+import com.alexvit.cats.common.data.CatRepository;
+import com.alexvit.cats.common.data.Image;
 
 class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
 
     private final CatRepository repository;
 
-    DetailViewModel(Lifecycle lifecycle, CatRepository repository) {
+    private DetailViewModel(Lifecycle lifecycle, CatRepository repository) {
         super(lifecycle);
         this.repository = repository;
     }

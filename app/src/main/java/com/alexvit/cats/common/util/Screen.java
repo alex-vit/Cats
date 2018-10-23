@@ -1,4 +1,4 @@
-package com.alexvit.cats.util;
+package com.alexvit.cats.common.util;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

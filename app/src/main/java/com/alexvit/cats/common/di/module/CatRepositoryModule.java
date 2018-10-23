@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alexvit.cats.BuildConfig;
+import com.alexvit.cats.common.data.CatRepository;
+import com.alexvit.cats.common.data.api.CatRemoteDataSource;
+import com.alexvit.cats.common.data.api.InsertApiKeyInterceptor;
+import com.alexvit.cats.common.data.api.TheCatApiService;
 import com.alexvit.cats.common.di.qualifier.ApiKey;
 import com.alexvit.cats.common.di.qualifier.CacheFile;
 import com.alexvit.cats.common.di.scope.ApplicationScope;
-import com.alexvit.cats.data.CatRepository;
-import com.alexvit.cats.data.source.remote.CatRemoteDataSource;
-import com.alexvit.cats.data.source.remote.InsertApiKeyInterceptor;
-import com.alexvit.cats.data.source.remote.TheCatApiService;
-import com.alexvit.cats.util.Constants;
 
 import java.io.File;
 
@@ -21,7 +20,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
@@ -52,10 +51,10 @@ public class CatRepositoryModule {
     @ApplicationScope
     Retrofit retrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl(Constants.CAT_API_BASE_URL)
+                .baseUrl(CatRemoteDataSource.BASE_URL)
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
-import com.alexvit.cats.data.model.Image;
+import com.alexvit.cats.common.data.Image;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import java.util.ArrayList;

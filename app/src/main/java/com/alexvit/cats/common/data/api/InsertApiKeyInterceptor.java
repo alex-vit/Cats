@@ -1,18 +1,15 @@
-package com.alexvit.cats.data.source.remote;
+package com.alexvit.cats.common.data.api;
 
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
 
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 
-/**
- * https://futurestud.io/tutorials/retrofit-2-how-to-add-query-parameters-to-every-request
- */
-
 public class InsertApiKeyInterceptor implements Interceptor {
+
+    private static final String HEADER_API_KEY = "x-api-key";
 
     private final String apiKey;
 
@@ -23,14 +20,9 @@ public class InsertApiKeyInterceptor implements Interceptor {
     @Override
     public okhttp3.Response intercept(@NonNull Interceptor.Chain chain) throws IOException {
         Request originalRequest = chain.request();
-        HttpUrl originalUrl = originalRequest.url();
-
-        HttpUrl url = originalUrl.newBuilder()
-                .addQueryParameter("api_key", apiKey)
-                .build();
 
         Request request = originalRequest.newBuilder()
-                .url(url)
+                .addHeader(HEADER_API_KEY, apiKey)
                 .build();
 
         return chain.proceed(request);

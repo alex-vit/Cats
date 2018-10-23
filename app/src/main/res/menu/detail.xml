@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:compat="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_share"
         android:icon="@drawable/ic_share"
-        android:title=""
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
-        compat:showAsAction="always" />
+        android:title="@null"
+        app:showAsAction="always" />
 
 </menu>

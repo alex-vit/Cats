@@ -1,4 +1,4 @@
-package com.alexvit.cats.view;
+package com.alexvit.cats.common.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

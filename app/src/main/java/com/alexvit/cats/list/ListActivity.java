@@ -10,14 +10,14 @@ import android.widget.ImageView;
 import com.alexvit.cats.App;
 import com.alexvit.cats.R;
 import com.alexvit.cats.common.base.BaseActivity;
+import com.alexvit.cats.common.data.Image;
 import com.alexvit.cats.common.rx.ActivityModule;
 import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
 import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
 import com.alexvit.cats.common.traits.HasComponent;
 import com.alexvit.cats.common.traits.HasViewModel;
-import com.alexvit.cats.data.model.Image;
+import com.alexvit.cats.common.util.Screen;
 import com.alexvit.cats.detail.DetailActivity;
-import com.alexvit.cats.util.Screen;
 
 import java.util.List;
 
