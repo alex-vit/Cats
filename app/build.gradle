@@ -33,6 +33,13 @@ android {
     buildToolsVersion '28.0.3'
 }
 
+// Dagger 2.18 javac options
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += ["-Adagger.formatGeneratedSource=disabled", "-Adagger.gradle.incremental"]
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
