@@ -1,14 +1,14 @@
 package com.alexvit.cats.detail;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.alexvit.cats.common.base.BaseViewModel;
 import com.alexvit.cats.common.data.CatRepository;
 import com.alexvit.cats.common.data.Image;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
 

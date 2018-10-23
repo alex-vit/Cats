@@ -1,10 +1,9 @@
 package com.alexvit.cats.common.rx;
 
-import android.arch.lifecycle.Lifecycle;
-import android.support.v7.app.AppCompatActivity;
-
 import com.alexvit.cats.common.di.scope.ActivityScope;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
 import dagger.Module;
 import dagger.Provides;
 

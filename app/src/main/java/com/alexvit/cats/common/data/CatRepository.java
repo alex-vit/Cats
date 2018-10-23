@@ -1,8 +1,6 @@
 package com.alexvit.cats.common.data;
 
 import android.content.SharedPreferences;
-import android.support.annotation.IntDef;
-import android.support.annotation.StringDef;
 
 import com.alexvit.cats.common.data.api.CatRemoteDataSource;
 import com.alexvit.cats.common.rx.Observables;
@@ -12,6 +10,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.UUID;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.StringDef;
 import io.reactivex.Observable;
 
 import static com.alexvit.cats.common.rx.Transformers.schedulers;

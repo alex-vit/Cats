@@ -2,10 +2,11 @@ package com.alexvit.cats.common.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import com.alexvit.cats.R;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.

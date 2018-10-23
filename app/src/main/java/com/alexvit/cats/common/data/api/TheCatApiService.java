@@ -1,12 +1,11 @@
 package com.alexvit.cats.common.data.api;
 
-import android.support.annotation.IntRange;
-
 import com.alexvit.cats.common.data.CatRepository;
 import com.alexvit.cats.common.data.Image;
 
 import java.util.List;
 
+import androidx.annotation.IntRange;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

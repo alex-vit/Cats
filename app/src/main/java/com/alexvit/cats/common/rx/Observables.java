@@ -1,7 +1,6 @@
 package com.alexvit.cats.common.rx;
 
-import android.support.annotation.Nullable;
-
+import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 
 public class Observables {

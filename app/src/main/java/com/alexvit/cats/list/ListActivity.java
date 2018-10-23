@@ -1,10 +1,6 @@
 package com.alexvit.cats.list;
 
 import android.content.Intent;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.alexvit.cats.App;
@@ -22,6 +18,11 @@ import com.alexvit.cats.detail.DetailActivity;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class ListActivity extends BaseActivity implements
         HasComponent<ListComponent>,

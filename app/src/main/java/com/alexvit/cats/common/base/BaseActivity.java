@@ -1,14 +1,15 @@
 package com.alexvit.cats.common.base;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.alexvit.cats.common.traits.HasComponent;
 import com.alexvit.cats.common.traits.HasViewModel;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
