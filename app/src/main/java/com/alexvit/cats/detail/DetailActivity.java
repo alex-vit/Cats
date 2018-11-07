@@ -61,7 +61,6 @@ public class DetailActivity extends BaseActivity implements
         if (savedInstanceState != null) {
             isUiShown = savedInstanceState.getBoolean(KEY_UI_VISIBILITY, isUiShown);
         }
-        updateUiVisibility();
 
         String id = getIntent().getStringExtra(KEY_ID);
         if (id != null) {
@@ -73,14 +72,15 @@ public class DetailActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_UI_VISIBILITY, isUiShown);
+    protected void onResume() {
+        super.onResume();
+        updateUiVisibility();
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) showUi();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_UI_VISIBILITY, isUiShown);
     }
 
     @Override
