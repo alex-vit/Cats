@@ -2,13 +2,10 @@ package com.alexvit.cats.detail;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.alexvit.cats.App;
@@ -22,36 +19,49 @@ import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
 import com.alexvit.cats.common.traits.HasComponent;
 import com.alexvit.cats.common.traits.HasViewModel;
 import com.alexvit.cats.detail.DetailViewModel.State;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.core.content.ContextCompat;
-import androidx.palette.graphics.Palette;
+import androidx.appcompat.widget.Toolbar;
 
 public class DetailActivity extends BaseActivity implements
         HasComponent<DetailComponent>,
         HasViewModel<DetailViewModel> {
 
     private static final String KEY_ID = "KEY_ID";
+    private static final String KEY_UI_VISIBILITY = "KEY_UI_VISIBILITY";
+
+    private static final int FULLSCREEN = View.SYSTEM_UI_FLAG_IMMERSIVE
+            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_FULLSCREEN;
+    private static final int FULLSCREEN_HIDE_NAV = View.SYSTEM_UI_FLAG_IMMERSIVE
+            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 
     private final LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
             UnsubscribeOn.PAUSE);
     @Inject
     DetailViewModel viewModel;
 
-    private Image image;
-
     private ImageView ivFull;
+    private Toolbar toolbar;
+
+    private boolean isUiShown = true;
+    private Image image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            isUiShown = savedInstanceState.getBoolean(KEY_UI_VISIBILITY, isUiShown);
+        }
+        updateUiVisibility();
 
         String id = getIntent().getStringExtra(KEY_ID);
         if (id != null) {
@@ -60,6 +70,17 @@ public class DetailActivity extends BaseActivity implements
             throw new IllegalArgumentException("No ID was given.");
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_UI_VISIBILITY, isUiShown);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) showUi();
     }
 
     @Override
@@ -92,6 +113,11 @@ public class DetailActivity extends BaseActivity implements
     protected void setupViews() {
         initToolbar();
         ivFull = findViewById(R.id.iv_full);
+        View root = findViewById(R.id.root);
+        root.setOnClickListener(__ -> {
+            isUiShown = !isUiShown;
+            updateUiVisibility();
+        });
     }
 
     @Override
@@ -138,7 +164,8 @@ public class DetailActivity extends BaseActivity implements
     }
 
     private void initToolbar() {
-        setSupportActionBar(findViewById(R.id.toolbar));
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -150,18 +177,6 @@ public class DetailActivity extends BaseActivity implements
         setTitle(image.id);
         GlideApp.with(this)
                 .load(image.url)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        applyPalette(((BitmapDrawable) resource).getBitmap());
-                        return false;
-                    }
-                })
                 .into(ivFull);
     }
 
@@ -173,17 +188,20 @@ public class DetailActivity extends BaseActivity implements
         startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
     }
 
-    private void applyPalette(Bitmap bitmap) {
-        Palette.from(bitmap).generate(palette -> {
-            int defaultColor = ContextCompat.getColor(this, R.color.primary);
-            int muted = palette.getMutedColor(defaultColor);
-            int color = palette.getVibrantColor(muted);
-            ActionBar bar = getSupportActionBar();
-            if (bar != null) {
-                bar.setBackgroundDrawable(new ColorDrawable(color));
-                getWindow().setStatusBarColor(color);
-            }
-        });
+    private void updateUiVisibility() {
+        if (isUiShown) showUi();
+        else hideUi();
+
+        float alpha = (isUiShown) ? 1 : 0;
+        toolbar.animate().alpha(alpha);
+    }
+
+    private void showUi() {
+        getWindow().getDecorView().setSystemUiVisibility(FULLSCREEN);
+    }
+
+    private void hideUi() {
+        getWindow().getDecorView().setSystemUiVisibility(FULLSCREEN_HIDE_NAV);
     }
 
 }

@@ -1,6 +1,8 @@
 package com.alexvit.cats.list;
 
 import android.content.Intent;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.alexvit.cats.App;
@@ -14,11 +16,13 @@ import com.alexvit.cats.common.traits.HasComponent;
 import com.alexvit.cats.common.traits.HasViewModel;
 import com.alexvit.cats.common.util.Screen;
 import com.alexvit.cats.detail.DetailActivity;
+import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +41,9 @@ public class ListActivity extends BaseActivity implements
     private ListAdapter adapter;
     private RecyclerView thumbnails;
     private SwipeRefreshLayout refresh;
+    private AppBarLayout appBar;
+
+    private Boolean insetApplied = false;
 
     private LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
             UnsubscribeOn.PAUSE);
@@ -53,6 +60,27 @@ public class ListActivity extends BaseActivity implements
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.primary, R.color.accent);
         refresh.setOnRefreshListener(viewModel::refresh);
+
+        appBar = findViewById(R.id.app_bar);
+        appBar.addOnOffsetChangedListener((v, offset) -> {
+            if (offset == 0) onToolbarExpanded();
+            else if (Math.abs(offset) == appBar.getTotalScrollRange()) onToolbarCollapsed();
+        });
+
+        View root = findViewById(R.id.root);
+        root.setOnApplyWindowInsetsListener((v, insets) -> {
+            if (!insetApplied) {
+                insetApplied = true;
+                int top = insets.getSystemWindowInsetTop();
+                Log.d("insets", String.valueOf(top));
+
+                Toolbar toolbar = findViewById(R.id.toolbar);
+                AppBarLayout.LayoutParams layoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+                layoutParams.height += top;
+                toolbar.setLayoutParams(layoutParams);
+            }
+            return insets;
+        });
 
         initRecycler();
     }
@@ -124,6 +152,27 @@ public class ListActivity extends BaseActivity implements
                 this, shared, "cat_image");
 
         startActivity(intent, options.toBundle());
+    }
+
+    private void onToolbarCollapsed() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        );
+    }
+
+    private void onToolbarExpanded() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
     }
 
 }

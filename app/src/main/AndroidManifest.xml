@@ -18,6 +18,7 @@
 
         <activity
             android:name=".list.ListActivity"
+            android:theme="@style/ListActivity"
             android:launchMode="singleTop">
 
             <intent-filter>
