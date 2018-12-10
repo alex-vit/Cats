@@ -1,5 +1,5 @@
 # Cats
-Cats for days. Browse, vote and share!
+Browse endless cats in an immersive UI.
 ## Download
 https://play.google.com/store/apps/details?id=com.alexvit.cats
 ## Building
