@@ -9,14 +9,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
 
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:4.1.0'
-        classpath 'com.google.firebase:firebase-plugins:1.1.5'
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.google.firebase:firebase-plugins:1.2.0'
+        classpath 'io.fabric.tools:gradle:1.26.1'
     }
 }
 
@@ -34,8 +34,8 @@ task clean(type: Delete) {
 ext {
     daggerVersion = '2.18'
     glideVersion = '4.8.0'
-    firebaseVersion = '16.0.4'
-    firebasePerformanceVersion = '16.1.2'
+    firebaseVersion = '16.0.8'
+    firebasePerformanceVersion = '16.2.5'
     lifecycleVersion = '1.1.1'
     retrofitVersion = '2.4.0'
     rxAndroidVersion = '2.1.0'

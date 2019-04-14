@@ -12,8 +12,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         multiDexEnabled false
-        versionCode 10001
-        versionName "1.0.1"
+        versionCode 10100
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -42,14 +42,14 @@ gradle.projectsEvaluated {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
@@ -71,7 +71,7 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-    annotationProcessor 'androidx.annotation:annotation:1.0.0'
+    annotationProcessor 'androidx.annotation:annotation:1.0.2'
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     // Palette
@@ -82,7 +82,7 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:$rootProject.firebasePerformanceVersion"
 
     // Crashlytics
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 }
 
 apply plugin: 'com.google.gms.google-services'
