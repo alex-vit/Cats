@@ -3,13 +3,13 @@ package com.alexvit.cats.common.base;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.alexvit.cats.common.traits.HasComponent;
-import com.alexvit.cats.common.traits.HasViewModel;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.alexvit.cats.common.traits.HasComponent;
+import com.alexvit.cats.common.traits.HasViewModel;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
