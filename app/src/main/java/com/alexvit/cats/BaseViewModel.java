@@ -1,9 +1,7 @@
-package com.alexvit.cats.common.base;
+package com.alexvit.cats;
 
 import androidx.annotation.CallSuper;
 import androidx.lifecycle.ViewModel;
-
-import com.alexvit.cats.common.rx.SafeSubscriber;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;

@@ -1,4 +1,4 @@
-package com.alexvit.cats.common.rx;
+package com.alexvit.cats;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -9,6 +9,7 @@ public class Transformers {
     private Transformers() {
     }
 
+    // TODO inline as: repos subscribe(IO); observers observe(UI)
     public static <A> ObservableTransformer<A, A> schedulers() {
         return upstream -> upstream
                 .subscribeOn(Schedulers.io())

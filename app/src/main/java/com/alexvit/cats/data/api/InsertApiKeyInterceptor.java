@@ -1,8 +1,9 @@
-package com.alexvit.cats.common.data.api;
+package com.alexvit.cats.data.api;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
-import androidx.annotation.NonNull;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 
@@ -16,6 +17,7 @@ public class InsertApiKeyInterceptor implements Interceptor {
         this.apiKey = apiKey;
     }
 
+    @NonNull
     @Override
     public okhttp3.Response intercept(@NonNull Interceptor.Chain chain) throws IOException {
         Request originalRequest = chain.request();

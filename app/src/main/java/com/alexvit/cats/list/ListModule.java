@@ -1,11 +1,11 @@
 package com.alexvit.cats.list;
 
-import com.alexvit.cats.common.data.CatRepository;
-import com.alexvit.cats.common.di.scope.ActivityScope;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.alexvit.cats.data.CatRepository;
+import com.alexvit.cats.di.scope.ActivityScope;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -15,13 +15,13 @@ class ListModule {
     @Provides
     @ActivityScope
     ListViewModel listViewModel(AppCompatActivity activity, ListViewModel.Factory factory) {
-        return ViewModelProviders.of(activity, factory).get(ListViewModel.class);
+        return new ViewModelProvider(activity.getViewModelStore(), factory).get(ListViewModel.class);
     }
 
     @Provides
     @ActivityScope
-    ListViewModel.Factory listViewModelFactory(Lifecycle lifecycle, CatRepository catRepository) {
-        return new ListViewModel.Factory(lifecycle, catRepository);
+    ListViewModel.Factory listViewModelFactory(CatRepository catRepository) {
+        return new ListViewModel.Factory(catRepository);
     }
 
 }

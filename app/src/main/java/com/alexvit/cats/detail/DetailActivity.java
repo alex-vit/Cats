@@ -13,12 +13,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 import com.alexvit.cats.App;
+import com.alexvit.cats.BaseActivity;
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
-import com.alexvit.cats.common.base.BaseActivity;
-import com.alexvit.cats.common.data.Image;
-import com.alexvit.cats.common.rx.ActivityModule;
-import com.alexvit.cats.detail.DetailViewModel.State;
+import com.alexvit.cats.data.Image;
+import com.alexvit.cats.di.ActivityModule;
 
 import javax.inject.Inject;
 
@@ -114,7 +113,7 @@ public class DetailActivity extends BaseActivity {
             supportFinishAfterTransition();
             return true;
         } else if (id == R.id.menu_share) {
-            shareImage(image.url);
+            shareImage(image.url());
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -126,8 +125,8 @@ public class DetailActivity extends BaseActivity {
 
     }
 
-    private void onState(State state) {
-        if (state.image != null) displayImage(state.image);
+    private void onState(DetailState state) {
+        if (state.image() != null) displayImage(state.image());
     }
 
     public static Intent getIntent(Activity activity, String id) {
@@ -136,11 +135,11 @@ public class DetailActivity extends BaseActivity {
         return intent;
     }
 
-    private void displayImage(Image image) {
+    private void displayImage(@NonNull Image image) {
         this.image = image;
-        setTitle(image.id);
+        setTitle(image.id());
         GlideApp.with(this)
-                .load(image.url)
+                .load(image.url())
                 .into(ivFull);
     }
 

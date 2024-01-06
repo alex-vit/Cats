@@ -1,20 +1,21 @@
 package com.alexvit.cats.list;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
-import com.alexvit.cats.common.data.Image;
+import com.alexvit.cats.data.Image;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
@@ -33,21 +34,18 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thumbnail, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Image image = getItem(position);
-
         GlideApp.with(holder.itemView.getContext())
-                .load(image.url)
+                .load(image.url())
                 .placeholder(R.drawable.ic_image_24dp)
                 .error(R.drawable.ic_image_24dp)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.ivThumbnail);
-
         holder.ivThumbnail.setOnClickListener(__ -> listener.onItemClicked(getItem(position),
                 holder.ivThumbnail));
     }
@@ -57,6 +55,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return images.size();
     }
 
+    // TODO change to list adapter
+    @SuppressLint("NotifyDataSetChanged")
     void setImages(List<Image> images) {
         this.images.clear();
         this.images.addAll(images);

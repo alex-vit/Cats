@@ -1,49 +1,40 @@
 package com.alexvit.cats.detail;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.alexvit.cats.common.base.BaseViewModel;
-import com.alexvit.cats.common.data.CatRepository;
-import com.alexvit.cats.common.data.Image;
+import com.alexvit.cats.BaseViewModel;
+import com.alexvit.cats.data.CatRepository;
 
-class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
+class DetailViewModel extends BaseViewModel<DetailState> {
 
     private final CatRepository repository;
 
-    private DetailViewModel(Lifecycle lifecycle, CatRepository repository) {
+    private DetailViewModel(CatRepository repository) {
         super();
         this.repository = repository;
     }
 
     @Override
-    protected State defaultState() {
-        return State.loading();
+    protected DetailState defaultState() {
+        return new DetailState(null, true, false);
     }
 
     @Override
     public void onError(Throwable throwable) {
-        setState(State.error(Error.UNKNOWN));
+        setState(new DetailState(currentState.image(), false, true));
     }
 
     void load(String id) {
-        subscribe(repository.getImageById(id), image -> setState(State.image(image)));
-    }
-
-    enum Error {
-        UNKNOWN
+        subscribe(repository.getImageById(id), image -> setState(new DetailState(image, false, false)));
     }
 
     static class Factory extends ViewModelProvider.NewInstanceFactory {
 
-        private final Lifecycle lifecycle;
         private final CatRepository catRepository;
 
-        Factory(Lifecycle lifecycle, CatRepository catRepository) {
-            this.lifecycle = lifecycle;
+        Factory(CatRepository catRepository) {
             this.catRepository = catRepository;
         }
 
@@ -51,34 +42,7 @@ class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new DetailViewModel(lifecycle, catRepository);
+            return (T) new DetailViewModel(catRepository);
         }
-    }
-
-    // TODO records?
-    static class State {
-
-        @Nullable
-        final Image image;
-        @Nullable
-        final Error error;
-
-        private State(@Nullable Image image, @Nullable Error error) {
-            this.image = image;
-            this.error = error;
-        }
-
-        static State loading() {
-            return new State(null, null);
-        }
-
-        static State image(Image image) {
-            return new State(image, null);
-        }
-
-        static State error(Error error) {
-            return new State(null, error);
-        }
-
     }
 }

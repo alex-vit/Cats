@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
@@ -15,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alexvit.cats.App;
+import com.alexvit.cats.BaseActivity;
 import com.alexvit.cats.R;
-import com.alexvit.cats.common.base.BaseActivity;
-import com.alexvit.cats.common.data.Image;
-import com.alexvit.cats.common.rx.ActivityModule;
-import com.alexvit.cats.common.util.Screen;
+import com.alexvit.cats.Screen;
+import com.alexvit.cats.data.Image;
 import com.alexvit.cats.detail.DetailActivity;
+import com.alexvit.cats.di.ActivityModule;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
@@ -98,19 +99,19 @@ public class ListActivity extends BaseActivity implements ListAdapter.OnItemClic
 
     @Override
     public void onItemClicked(Image image, ImageView shared) {
-        launchDetails(image.id, shared);
+        launchDetails(image.id(), shared);
     }
 
-    private void onState(ListViewModel.State state) {
-        showLoading(state.loading);
-        if (state.images != null) displayImages(state.images);
+    private void onState(ListState state) {
+        showLoading(state.loading());
+        if (state.images() != null) displayImages(state.images());
     }
 
     private void showLoading(boolean isLoading) {
         refresh.setRefreshing(isLoading);
     }
 
-    private void displayImages(List<Image> images) {
+    private void displayImages(@NonNull List<Image> images) {
         adapter.setImages(images);
     }
 

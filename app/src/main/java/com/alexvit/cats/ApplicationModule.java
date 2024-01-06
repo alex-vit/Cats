@@ -2,9 +2,8 @@ package com.alexvit.cats;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-import com.alexvit.cats.common.di.scope.ApplicationScope;
+import com.alexvit.cats.di.scope.ApplicationScope;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import dagger.Module;
@@ -17,7 +16,7 @@ import dagger.Provides;
 @Module
 public class ApplicationModule {
 
-    private App app;
+    private final App app;
 
     public ApplicationModule(App app) {
         this.app = app;
@@ -32,7 +31,7 @@ public class ApplicationModule {
     @Provides
     @ApplicationScope
     SharedPreferences sharedPreferences(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
     }
 
     @Provides

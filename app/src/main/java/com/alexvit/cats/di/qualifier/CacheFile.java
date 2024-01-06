@@ -1,15 +1,15 @@
-package com.alexvit.cats.common.di.scope;
+package com.alexvit.cats.di.qualifier;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import javax.inject.Scope;
+import javax.inject.Qualifier;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-@Scope
+@Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActivityScope {
+public @interface CacheFile {
 }

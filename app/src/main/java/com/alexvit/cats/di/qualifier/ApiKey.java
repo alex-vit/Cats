@@ -1,4 +1,4 @@
-package com.alexvit.cats.common.di.qualifier;
+package com.alexvit.cats.di.qualifier;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

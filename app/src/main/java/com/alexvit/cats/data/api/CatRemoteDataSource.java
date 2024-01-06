@@ -1,7 +1,7 @@
-package com.alexvit.cats.common.data.api;
+package com.alexvit.cats.data.api;
 
-import com.alexvit.cats.common.data.CatRepository;
-import com.alexvit.cats.common.data.Image;
+import com.alexvit.cats.data.CatRepository;
+import com.alexvit.cats.data.Image;
 
 import java.util.List;
 

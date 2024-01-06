@@ -1,16 +1,15 @@
-package com.alexvit.cats.common.di.module;
+package com.alexvit.cats.di.module;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.alexvit.cats.BuildConfig;
-import com.alexvit.cats.common.data.CatRepository;
-import com.alexvit.cats.common.data.api.CatRemoteDataSource;
-import com.alexvit.cats.common.data.api.InsertApiKeyInterceptor;
-import com.alexvit.cats.common.data.api.TheCatApiService;
-import com.alexvit.cats.common.di.qualifier.ApiKey;
-import com.alexvit.cats.common.di.qualifier.CacheFile;
-import com.alexvit.cats.common.di.scope.ApplicationScope;
+import com.alexvit.cats.data.CatRepository;
+import com.alexvit.cats.data.api.CatRemoteDataSource;
+import com.alexvit.cats.data.api.InsertApiKeyInterceptor;
+import com.alexvit.cats.data.api.TheCatApiService;
+import com.alexvit.cats.di.qualifier.ApiKey;
+import com.alexvit.cats.di.qualifier.CacheFile;
+import com.alexvit.cats.di.scope.ApplicationScope;
 
 import java.io.File;
 
@@ -31,8 +30,8 @@ public class CatRepositoryModule {
 
     @Provides
     @ApplicationScope
-    CatRepository catRepository(CatRemoteDataSource remote, SharedPreferences preferences) {
-        return new CatRepository(remote, preferences);
+    CatRepository catRepository(CatRemoteDataSource remote) {
+        return new CatRepository(remote);
     }
 
     @Provides

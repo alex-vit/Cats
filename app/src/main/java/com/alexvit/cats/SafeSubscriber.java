@@ -1,4 +1,4 @@
-package com.alexvit.cats.common.rx;
+package com.alexvit.cats;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;

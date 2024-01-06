@@ -1,10 +1,8 @@
-package com.alexvit.cats.common.view;
+package com.alexvit.cats;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
-import com.alexvit.cats.R;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -24,6 +22,8 @@ public class AspectRatioImageView extends AppCompatImageView {
     public AspectRatioImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        // wait til min API 31...
+        //noinspection resource
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AspectRatioImageView);
         ratio = a.getFloat(R.styleable.AspectRatioImageView_aspectRatio, DEFAULT_ASPECT_RATIO);
         a.recycle();
