@@ -1,12 +1,13 @@
 package com.alexvit.cats.list;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alexvit.cats.GlideApp;
@@ -14,19 +15,18 @@ import com.alexvit.cats.R;
 import com.alexvit.cats.data.Image;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
-class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+class ImageListAdapter extends ListAdapter<Image, ImageListAdapter.ViewHolder> {
 
-    private final List<Image> images = new ArrayList<>();
-    private final OnItemClickListener listener;
+    private final OnImageClickListener listener;
 
-    ListAdapter(OnItemClickListener listener) {
+    ImageListAdapter(OnImageClickListener listener) {
+        super(new ImageDiff());
         this.listener = listener;
     }
 
@@ -46,40 +46,33 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 .error(R.drawable.ic_image_24dp)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.ivThumbnail);
-        holder.ivThumbnail.setOnClickListener(__ -> listener.onItemClicked(getItem(position),
+        holder.ivThumbnail.setOnClickListener(__ -> listener.onImageClick(getItem(position),
                 holder.ivThumbnail));
     }
 
-    @Override
-    public int getItemCount() {
-        return images.size();
-    }
-
-    // TODO change to list adapter
-    @SuppressLint("NotifyDataSetChanged")
-    void setImages(List<Image> images) {
-        this.images.clear();
-        this.images.addAll(images);
-        notifyDataSetChanged();
-    }
-
-    private Image getItem(int position) {
-        return images.get(position);
+    @FunctionalInterface
+    interface OnImageClickListener {
+        void onImageClick(Image image, ImageView shared);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
         private final ImageView ivThumbnail;
 
         ViewHolder(View itemView) {
             super(itemView);
-
             ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
         }
-
     }
 
-    interface OnItemClickListener {
-        void onItemClicked(Image image, ImageView shared);
+    private static class ImageDiff extends DiffUtil.ItemCallback<Image> {
+        @Override
+        public boolean areItemsTheSame(@NonNull Image oldItem, @NonNull Image newItem) {
+            return Objects.equals(oldItem.id(), newItem.id());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Image oldItem, @NonNull Image newItem) {
+            return Objects.equals(oldItem, newItem);
+        }
     }
 }

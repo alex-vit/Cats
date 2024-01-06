@@ -28,14 +28,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ListActivity extends BaseActivity implements ListAdapter.OnItemClickListener {
+public class ListActivity extends BaseActivity implements ImageListAdapter.OnImageClickListener {
 
     private static final int COL_WIDTH = 200;
 
     @Inject
     ListViewModel viewModel;
 
-    private ListAdapter adapter;
+    private ImageListAdapter adapter;
     private SwipeRefreshLayout refresh;
     private AppBarLayout appBar;
 
@@ -78,7 +78,7 @@ public class ListActivity extends BaseActivity implements ListAdapter.OnItemClic
             return insets;
         });
 
-        adapter = new ListAdapter(this);
+        adapter = new ImageListAdapter(this);
         thumbnails.setAdapter(adapter);
 
         int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
@@ -98,7 +98,7 @@ public class ListActivity extends BaseActivity implements ListAdapter.OnItemClic
     }
 
     @Override
-    public void onItemClicked(Image image, ImageView shared) {
+    public void onImageClick(Image image, ImageView shared) {
         launchDetails(image.id(), shared);
     }
 
@@ -112,7 +112,7 @@ public class ListActivity extends BaseActivity implements ListAdapter.OnItemClic
     }
 
     private void displayImages(@NonNull List<Image> images) {
-        adapter.setImages(images);
+        adapter.submitList(images);
     }
 
     private void launchDetails(String id, ImageView shared) {
