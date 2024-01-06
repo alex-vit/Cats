@@ -16,6 +16,11 @@ android {
         versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '28.0.3'
     buildTypes {
         release {
             minifyEnabled true
@@ -26,11 +31,6 @@ android {
     buildTypes.each {
         it.buildConfigField("String", "THE_CAT_API_KEY", "\"$TheCatApiKey\"")
     }
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
-    }
-    buildToolsVersion '28.0.3'
 }
 
 // Dagger 2.18 javac options
