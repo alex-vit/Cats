@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.alexvit.cats.common.view.AspectRatioImageView
+    <com.alexvit.cats.AspectRatioImageView
         android:id="@+id/iv_thumbnail"
         android:transitionName="cat_image"
         android:layout_width="match_parent"

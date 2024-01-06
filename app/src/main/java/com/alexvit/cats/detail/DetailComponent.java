@@ -1,9 +1,8 @@
 package com.alexvit.cats.detail;
 
 import com.alexvit.cats.ApplicationComponent;
-import com.alexvit.cats.common.base.BaseComponent;
-import com.alexvit.cats.common.di.scope.ActivityScope;
-import com.alexvit.cats.common.rx.ActivityModule;
+import com.alexvit.cats.di.ActivityModule;
+import com.alexvit.cats.di.scope.ActivityScope;
 
 import dagger.Component;
 
@@ -12,8 +11,6 @@ import dagger.Component;
         dependencies = {ApplicationComponent.class},
         modules = {ActivityModule.class, DetailModule.class}
 )
-interface DetailComponent extends BaseComponent {
-
+interface DetailComponent {
     void inject(DetailActivity detailActivity);
-
 }

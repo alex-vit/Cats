@@ -8,26 +8,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alexvit.cats.App;
-import com.alexvit.cats.GlideApp;
-import com.alexvit.cats.R;
-import com.alexvit.cats.common.base.BaseActivity;
-import com.alexvit.cats.common.data.Image;
-import com.alexvit.cats.common.rx.ActivityModule;
-import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
-import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
-import com.alexvit.cats.common.traits.HasComponent;
-import com.alexvit.cats.common.traits.HasViewModel;
-import com.alexvit.cats.detail.DetailViewModel.State;
-
-import javax.inject.Inject;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
-public class DetailActivity extends BaseActivity implements
-        HasComponent<DetailComponent>,
-        HasViewModel<DetailViewModel> {
+import com.alexvit.cats.Analytics;
+import com.alexvit.cats.App;
+import com.alexvit.cats.BaseActivity;
+import com.alexvit.cats.GlideApp;
+import com.alexvit.cats.R;
+import com.alexvit.cats.data.Image;
+import com.alexvit.cats.di.ActivityModule;
+
+import javax.inject.Inject;
+
+public class DetailActivity extends BaseActivity {
 
     private static final String KEY_ID = "KEY_ID";
     private static final String KEY_UI_VISIBILITY = "KEY_UI_VISIBILITY";
@@ -43,8 +38,6 @@ public class DetailActivity extends BaseActivity implements
             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 
-    private final LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
-            UnsubscribeOn.PAUSE);
     @Inject
     DetailViewModel viewModel;
 
@@ -56,7 +49,26 @@ public class DetailActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DaggerDetailComponent.builder()
+                .applicationComponent(App.getComponent())
+                .activityModule(new ActivityModule(this))
+                .build()
+                .inject(this);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        ivFull = findViewById(R.id.iv_full);
+        View root = findViewById(R.id.root);
+        root.setOnClickListener(__ -> {
+            isUiShown = !isUiShown;
+            updateUiVisibility();
+        });
 
         if (savedInstanceState != null) {
             isUiShown = savedInstanceState.getBoolean(KEY_UI_VISIBILITY, isUiShown);
@@ -72,13 +84,19 @@ public class DetailActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        subscribe(viewModel.getState(), this::onState);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         updateUiVisibility();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_UI_VISIBILITY, isUiShown);
     }
@@ -92,45 +110,16 @@ public class DetailActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                supportFinishAfterTransition();
-                return true;
-            case R.id.menu_share:
-                shareImage(image.url);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (id == android.R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        } else if (id == R.id.menu_share) {
+            shareImage(image.url());
+            Analytics.itemShare(image.id());
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_detail;
-    }
-
-    @Override
-    protected void setupViews() {
-        initToolbar();
-        ivFull = findViewById(R.id.iv_full);
-        View root = findViewById(R.id.root);
-        root.setOnClickListener(__ -> {
-            isUiShown = !isUiShown;
-            updateUiVisibility();
-        });
-    }
-
-    @Override
-    public DetailComponent buildComponent() {
-        return DaggerDetailComponent.builder()
-                .applicationComponent(App.getComponent())
-                .activityModule(new ActivityModule(this))
-                .build();
-    }
-
-    @Override
-    public void inject(DetailComponent component) {
-        component.inject(this);
     }
 
     @Override
@@ -138,23 +127,8 @@ public class DetailActivity extends BaseActivity implements
 
     }
 
-    @Override
-    public LifecycleCompositeDisposable getSubs() {
-        return subs;
-    }
-
-    @Override
-    public DetailViewModel getViewModel() {
-        return viewModel;
-    }
-
-    @Override
-    public void observe(DetailViewModel viewModel) {
-        subscribe(viewModel.getState(), this::onState);
-    }
-
-    private void onState(State state) {
-        if (state.image != null) displayImage(state.image);
+    private void onState(DetailState state) {
+        if (state.image() != null) displayImage(state.image());
     }
 
     public static Intent getIntent(Activity activity, String id) {
@@ -163,20 +137,11 @@ public class DetailActivity extends BaseActivity implements
         return intent;
     }
 
-    private void initToolbar() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    private void displayImage(Image image) {
+    private void displayImage(@NonNull Image image) {
         this.image = image;
-        setTitle(image.id);
+        setTitle(image.id());
         GlideApp.with(this)
-                .load(image.url)
+                .load(image.url())
                 .into(ivFull);
     }
 
