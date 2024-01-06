@@ -8,6 +8,7 @@ import com.alexvit.cats.data.api.CatRemoteDataSource;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -45,7 +46,22 @@ public class CatRepository {
     }
 
     public Observable<Image> getImageById(String id) {
-        return remote.getImageById(id).subscribeOn(Schedulers.io());
+        var cachedImage = getRandomImages()
+                .filter(Objects::nonNull)
+                .map(images -> {
+                    Image found = null;
+                    for (var image : images) {
+                        if (image.id().equals(id)) {
+                            found = image;
+                        }
+                    }
+                    return found;
+                })
+                .filter(Objects::nonNull);
+        return cachedImage
+                .concatWith(remote.getImageById(id))
+                .distinctUntilChanged()
+                .subscribeOn(Schedulers.io());
     }
 
     @StringDef({SIZE_SMALL, SIZE_MEDIUM, SIZE_FULL})
