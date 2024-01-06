@@ -1,21 +1,21 @@
 package com.alexvit.cats.detail;
 
-import com.alexvit.cats.common.base.BaseViewModel;
-import com.alexvit.cats.common.data.CatRepository;
-import com.alexvit.cats.common.data.Image;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.alexvit.cats.common.base.BaseViewModel;
+import com.alexvit.cats.common.data.CatRepository;
+import com.alexvit.cats.common.data.Image;
+
 class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
 
     private final CatRepository repository;
 
     private DetailViewModel(Lifecycle lifecycle, CatRepository repository) {
-        super(lifecycle);
+        super();
         this.repository = repository;
     }
 
@@ -55,6 +55,7 @@ class DetailViewModel extends BaseViewModel<DetailViewModel.State> {
         }
     }
 
+    // TODO records?
     static class State {
 
         @Nullable

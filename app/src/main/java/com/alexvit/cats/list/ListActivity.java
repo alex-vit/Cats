@@ -1,19 +1,24 @@
 package com.alexvit.cats.list;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alexvit.cats.App;
 import com.alexvit.cats.R;
 import com.alexvit.cats.common.base.BaseActivity;
 import com.alexvit.cats.common.data.Image;
 import com.alexvit.cats.common.rx.ActivityModule;
-import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
-import com.alexvit.cats.common.rx.LifecycleCompositeDisposable.UnsubscribeOn;
-import com.alexvit.cats.common.traits.HasComponent;
-import com.alexvit.cats.common.traits.HasViewModel;
 import com.alexvit.cats.common.util.Screen;
 import com.alexvit.cats.detail.DetailActivity;
 import com.google.android.material.appbar.AppBarLayout;
@@ -22,16 +27,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-public class ListActivity extends BaseActivity implements
-        HasComponent<ListComponent>,
-        HasViewModel<ListViewModel>,
-        ListAdapter.OnItemClickListener {
+public class ListActivity extends BaseActivity implements ListAdapter.OnItemClickListener {
 
     private static final int COL_WIDTH = 200;
 
@@ -39,23 +35,22 @@ public class ListActivity extends BaseActivity implements
     ListViewModel viewModel;
 
     private ListAdapter adapter;
-    private RecyclerView thumbnails;
     private SwipeRefreshLayout refresh;
     private AppBarLayout appBar;
 
     private Boolean insetApplied = false;
 
-    private LifecycleCompositeDisposable subs = new LifecycleCompositeDisposable(getLifecycle(),
-            UnsubscribeOn.PAUSE);
-
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_list;
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        DaggerListComponent.builder()
+                .applicationComponent(App.getComponent())
+                .activityModule(new ActivityModule(this))
+                .build()
+                .inject(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list);
 
-    @Override
-    protected void setupViews() {
-        thumbnails = findViewById(R.id.rv_thumbnails);
+        RecyclerView thumbnails = findViewById(R.id.rv_thumbnails);
 
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.primary, R.color.accent);
@@ -82,40 +77,23 @@ public class ListActivity extends BaseActivity implements
             return insets;
         });
 
-        initRecycler();
+        adapter = new ListAdapter(this);
+        thumbnails.setAdapter(adapter);
+
+        int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
+        thumbnails.setLayoutManager(new GridLayoutManager(
+                this, columns, GridLayoutManager.VERTICAL, false));
     }
 
     @Override
-    public ListComponent buildComponent() {
-        return DaggerListComponent.builder()
-                .applicationComponent(App.getComponent())
-                .activityModule(new ActivityModule(this))
-                .build();
-    }
-
-    @Override
-    public void inject(ListComponent component) {
-        component.inject(this);
+    protected void onStart() {
+        super.onStart();
+        subscribe(viewModel.getState(), this::onState);
     }
 
     @Override
     public void onError(Throwable throwable) {
 
-    }
-
-    @Override
-    public LifecycleCompositeDisposable getSubs() {
-        return subs;
-    }
-
-    @Override
-    public ListViewModel getViewModel() {
-        return viewModel;
-    }
-
-    @Override
-    public void observe(ListViewModel viewModel) {
-        subscribe(viewModel.getState(), this::onState);
     }
 
     @Override
@@ -136,16 +114,8 @@ public class ListActivity extends BaseActivity implements
         adapter.setImages(images);
     }
 
-    private void initRecycler() {
-        adapter = new ListAdapter(this);
-        thumbnails.setAdapter(adapter);
-
-        int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
-        thumbnails.setLayoutManager(new GridLayoutManager(
-                this, columns, GridLayoutManager.VERTICAL, false));
-    }
-
     private void launchDetails(String id, ImageView shared) {
+        @SuppressLint("UnsafeIntentLaunch")
         Intent intent = DetailActivity.getIntent(this, id);
 
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(

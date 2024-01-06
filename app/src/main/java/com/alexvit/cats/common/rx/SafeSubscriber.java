@@ -1,22 +1,24 @@
-package com.alexvit.cats.common.traits;
-
-import com.alexvit.cats.common.rx.LifecycleCompositeDisposable;
+package com.alexvit.cats.common.rx;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public interface SafeSubscriber extends ErrorHandler {
+/**
+ * @noinspection unused
+ */
+public interface SafeSubscriber {
 
     @NonNull
-    LifecycleCompositeDisposable getSubs();
+    CompositeDisposable subs = new CompositeDisposable();
 
     default <T> void subscribe(Observable<T> observable, Consumer<? super T> onNext,
                                Consumer<? super Throwable> onError, Action onComplete) {
         Disposable sub = observable.subscribe(onNext, onError, onComplete);
-        getSubs().add(sub);
+        subs.add(sub);
     }
 
     default <T> void subscribe(Observable<T> observable, Consumer<? super T> onNext,
@@ -32,4 +34,5 @@ public interface SafeSubscriber extends ErrorHandler {
         subscribe(observable, __ -> {}, this::onError, () -> {});
     }
 
+    void onError(Throwable throwable);
 }

@@ -1,5 +1,11 @@
 package com.alexvit.cats.list;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.alexvit.cats.Analytics;
 import com.alexvit.cats.common.base.BaseViewModel;
 import com.alexvit.cats.common.data.CatRepository;
@@ -7,23 +13,13 @@ import com.alexvit.cats.common.data.Image;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
 class ListViewModel extends BaseViewModel<ListViewModel.State> {
 
     private final CatRepository catRepository;
 
-    private ListViewModel(Lifecycle lifecycle, CatRepository catRepository) {
-        super(lifecycle);
+    private ListViewModel(CatRepository catRepository) {
+        super();
         this.catRepository = catRepository;
-    }
-
-    @Override
-    protected void onStart() {
         loadImages();
     }
 
@@ -68,7 +64,7 @@ class ListViewModel extends BaseViewModel<ListViewModel.State> {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new ListViewModel(lifecycle, catRepository);
+            return (T) new ListViewModel(catRepository);
         }
     }
 
