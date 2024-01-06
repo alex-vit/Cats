@@ -1,6 +1,7 @@
 package com.alexvit.cats;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -17,7 +18,9 @@ public interface SafeSubscriber {
 
     default <T> void subscribe(Observable<T> observable, Consumer<? super T> onNext,
                                Consumer<? super Throwable> onError, Action onComplete) {
-        Disposable sub = observable.subscribe(onNext, onError, onComplete);
+        Disposable sub = observable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onNext, onError, onComplete);
         subs.add(sub);
     }
 

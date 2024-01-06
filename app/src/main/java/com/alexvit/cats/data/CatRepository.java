@@ -1,7 +1,5 @@
 package com.alexvit.cats.data;
 
-import static com.alexvit.cats.Transformers.schedulers;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 
@@ -12,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
@@ -41,12 +40,12 @@ public class CatRepository {
 
     public Observable<List<Image>> fetchRandomImages() {
         return remote.getRandomImages(DEFAULT_IMAGE_COUNT)
-                .compose(schedulers())
-                .doOnNext(i -> images = i);
+                .doOnNext(i -> images = i)
+                .subscribeOn(Schedulers.io());
     }
 
     public Observable<Image> getImageById(String id) {
-        return remote.getImageById(id).compose(schedulers());
+        return remote.getImageById(id).subscribeOn(Schedulers.io());
     }
 
     @StringDef({SIZE_SMALL, SIZE_MEDIUM, SIZE_FULL})

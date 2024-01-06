@@ -18,7 +18,6 @@ public class Analytics {
         instance().logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, params);
     }
 
-    // TODO add analytics
     public static void itemView(String id) {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_ID, id);
