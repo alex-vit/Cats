@@ -93,11 +93,6 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
     }
 
     @Override
-    public void onError(Throwable throwable) {
-
-    }
-
-    @Override
     public void onImageClick(Image image, ImageView shared) {
         launchDetails(image.id(), shared);
     }

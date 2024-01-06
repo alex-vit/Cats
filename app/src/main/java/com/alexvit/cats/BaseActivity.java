@@ -1,5 +1,7 @@
 package com.alexvit.cats;
 
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class BaseActivity extends AppCompatActivity implements SafeSubscriber {
@@ -11,5 +13,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SafeSubs
     }
 
     @Override
-    public abstract void onError(Throwable throwable);
+    public void onError(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+    }
 }

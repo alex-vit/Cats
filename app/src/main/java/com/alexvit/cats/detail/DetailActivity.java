@@ -122,11 +122,6 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onError(Throwable throwable) {
-
-    }
-
     private void onState(DetailState state) {
         if (state.image() != null) displayImage(state.image());
     }
