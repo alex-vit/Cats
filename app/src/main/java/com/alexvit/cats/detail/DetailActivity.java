@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
+import com.alexvit.cats.Analytics;
 import com.alexvit.cats.App;
 import com.alexvit.cats.BaseActivity;
 import com.alexvit.cats.GlideApp;
@@ -114,6 +115,7 @@ public class DetailActivity extends BaseActivity {
             return true;
         } else if (id == R.id.menu_share) {
             shareImage(image.url());
+            Analytics.itemShare(image.id());
             return true;
         } else {
             return super.onOptionsItemSelected(item);

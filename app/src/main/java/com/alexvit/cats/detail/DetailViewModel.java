@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.alexvit.cats.Analytics;
 import com.alexvit.cats.BaseViewModel;
 import com.alexvit.cats.data.CatRepository;
 
@@ -27,7 +28,10 @@ class DetailViewModel extends BaseViewModel<DetailState> {
     }
 
     void load(String id) {
-        subscribe(repository.getImageById(id), image -> setState(new DetailState(image, false, false)));
+        subscribe(repository.getImageById(id), image -> {
+            setState(new DetailState(image, false, false));
+            Analytics.itemView(id);
+        });
     }
 
     static class Factory extends ViewModelProvider.NewInstanceFactory {
