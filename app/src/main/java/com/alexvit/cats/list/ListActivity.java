@@ -25,6 +25,7 @@ import com.alexvit.cats.detail.DetailActivity;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -38,7 +39,7 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
     private ImageListAdapter adapter;
     private SwipeRefreshLayout refresh;
     private AppBarLayout appBar;
-
+    private int appBarOffset;
     private Boolean insetApplied = false;
 
     @Override
@@ -59,8 +60,13 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
 
         appBar = findViewById(R.id.app_bar);
         appBar.addOnOffsetChangedListener((v, offset) -> {
-            if (offset == 0) onToolbarExpanded();
-            else if (Math.abs(offset) == appBar.getTotalScrollRange()) onToolbarCollapsed();
+            if (offset == appBarOffset) return;
+            appBarOffset = offset;
+            if (offset == 0) {
+                onToolbarExpanded();
+            } else if (Math.abs(offset) == appBar.getTotalScrollRange()) {
+                onToolbarCollapsed();
+            }
         });
 
         View root = findViewById(R.id.root);
@@ -82,8 +88,8 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
         thumbnails.setAdapter(adapter);
 
         int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
-        thumbnails.setLayoutManager(new GridLayoutManager(
-                this, columns, GridLayoutManager.VERTICAL, false));
+        var grid = Objects.requireNonNull((GridLayoutManager) thumbnails.getLayoutManager());
+        grid.setSpanCount(columns);
     }
 
     @Override
