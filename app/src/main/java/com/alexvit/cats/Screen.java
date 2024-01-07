@@ -16,10 +16,9 @@ public final class Screen {
     private Screen() {
     }
 
-    public static int columnCount(@NonNull Context context, int desiredColumnWidth) {
+    public static int columnCount(@NonNull Context context, int desiredColumnWidthDp) {
         Pair<Integer, Integer> dimensionsDp = screenDimensionsDp(context);
-        int width = dimensionsDp.first;
-        return Math.round((float) width / desiredColumnWidth);
+        return Math.round((float) dimensionsDp.first / desiredColumnWidthDp);
     }
 
     @NonNull

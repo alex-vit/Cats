@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,8 +32,6 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 public class ListActivity extends BaseActivity implements ImageListAdapter.OnImageClickListener {
-
-    private static final int COL_WIDTH = 200;
 
     @Inject
     ListViewModel viewModel;
@@ -69,6 +69,12 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
             }
         });
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.toolbar), (v, windowInsets) -> {
+            var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(insets.left, v.getPaddingTop(), insets.right, v.getPaddingBottom());
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         View root = findViewById(R.id.root);
         root.setOnApplyWindowInsetsListener((v, insets) -> {
             if (!insetApplied) {
@@ -87,7 +93,7 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
         adapter = new ImageListAdapter(this);
         thumbnails.setAdapter(adapter);
 
-        int columns = Math.max(2, Screen.columnCount(this, COL_WIDTH));
+        int columns = Math.max(2, Screen.columnCount(this, 200));
         var grid = Objects.requireNonNull((GridLayoutManager) thumbnails.getLayoutManager());
         grid.setSpanCount(columns);
     }
