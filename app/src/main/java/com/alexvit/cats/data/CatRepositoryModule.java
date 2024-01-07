@@ -1,4 +1,4 @@
-package com.alexvit.cats.di.module;
+package com.alexvit.cats.data;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.alexvit.cats.di;
+package com.alexvit.cats.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;

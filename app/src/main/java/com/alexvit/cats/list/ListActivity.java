@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alexvit.cats.App;
-import com.alexvit.cats.BaseActivity;
 import com.alexvit.cats.R;
 import com.alexvit.cats.Screen;
+import com.alexvit.cats.activity.ActivityModule;
+import com.alexvit.cats.activity.BaseActivity;
 import com.alexvit.cats.data.Image;
 import com.alexvit.cats.detail.DetailActivity;
-import com.alexvit.cats.di.ActivityModule;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;

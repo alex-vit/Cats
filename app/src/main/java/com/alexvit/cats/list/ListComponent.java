@@ -1,7 +1,7 @@
 package com.alexvit.cats.list;
 
 import com.alexvit.cats.ApplicationComponent;
-import com.alexvit.cats.di.ActivityModule;
+import com.alexvit.cats.activity.ActivityModule;
 import com.alexvit.cats.di.scope.ActivityScope;
 
 import dagger.Component;

@@ -1,8 +1,10 @@
-package com.alexvit.cats;
+package com.alexvit.cats.activity;
 
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.alexvit.cats.SafeSubscriber;
 
 public abstract class BaseActivity extends AppCompatActivity implements SafeSubscriber {
 

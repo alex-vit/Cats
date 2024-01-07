@@ -14,11 +14,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.alexvit.cats.Analytics;
 import com.alexvit.cats.App;
-import com.alexvit.cats.BaseActivity;
 import com.alexvit.cats.GlideApp;
 import com.alexvit.cats.R;
+import com.alexvit.cats.activity.ActivityModule;
+import com.alexvit.cats.activity.BaseActivity;
 import com.alexvit.cats.data.Image;
-import com.alexvit.cats.di.ActivityModule;
 
 import javax.inject.Inject;
 
