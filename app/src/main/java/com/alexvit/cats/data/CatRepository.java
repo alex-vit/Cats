@@ -2,7 +2,7 @@ package com.alexvit.cats.data;
 
 import androidx.annotation.Nullable;
 
-import com.alexvit.cats.data.api.CatRemoteDataSource;
+import com.alexvit.cats.data.api.TheCatApiService;
 import com.alexvit.cats.di.scope.ApplicationScope;
 
 import java.util.List;
@@ -18,15 +18,14 @@ import io.reactivex.schedulers.Schedulers;
 
 @ApplicationScope
 public class CatRepository {
-    private static final int DEFAULT_IMAGE_COUNT = 20;
 
-    private final CatRemoteDataSource remote;
+    private final TheCatApiService api;
     @Nullable
     private List<Image> images = null;
 
     @Inject
-    public CatRepository(CatRemoteDataSource remote) {
-        this.remote = remote;
+    public CatRepository(TheCatApiService api) {
+        this.api = api;
     }
 
     public Observable<List<Image>> getRandomImages() {
@@ -38,7 +37,7 @@ public class CatRepository {
     }
 
     public Observable<List<Image>> fetchRandomImages() {
-        return remote.getRandomImages(DEFAULT_IMAGE_COUNT)
+        return api.getImages(20)
                 .doOnNext(i -> images = i)
                 .subscribeOn(Schedulers.io());
     }

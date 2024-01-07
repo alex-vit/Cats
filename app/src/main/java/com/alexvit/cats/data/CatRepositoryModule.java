@@ -3,7 +3,6 @@ package com.alexvit.cats.data;
 import android.content.Context;
 
 import com.alexvit.cats.BuildConfig;
-import com.alexvit.cats.data.api.CatRemoteDataSource;
 import com.alexvit.cats.data.api.InsertApiKeyInterceptor;
 import com.alexvit.cats.data.api.TheCatApiService;
 import com.alexvit.cats.di.qualifier.ApiKey;
@@ -37,7 +36,7 @@ public class CatRepositoryModule {
     @ApplicationScope
     Retrofit retrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl(CatRemoteDataSource.BASE_URL)
+                .baseUrl(TheCatApiService.BASE_URL)
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

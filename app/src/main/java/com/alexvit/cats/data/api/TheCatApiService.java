@@ -16,6 +16,8 @@ import retrofit2.http.Query;
 
 public interface TheCatApiService {
 
+    String BASE_URL = "https://api.thecatapi.com/v1/";
+
     @GET("images/search?mime_types=jpg,png&order=RANDOM")
     Observable<List<Image>> getImages(@Query("limit") @IntRange(from = 1) Integer limit);
 
