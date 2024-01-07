@@ -12,8 +12,8 @@ android {
         applicationId = "com.alexvit.cats"
         minSdk = 21
         targetSdk = 34
-        versionCode = 10103
-        versionName = "1.1.2"
+        versionCode = 10104
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -32,6 +32,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+//            signingConfig = signingConfigs.getByName("debug")
+//            isDebuggable = true
         }
     }
     buildFeatures { buildConfig = true }
