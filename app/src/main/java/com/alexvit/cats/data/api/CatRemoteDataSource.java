@@ -1,6 +1,5 @@
 package com.alexvit.cats.data.api;
 
-import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.Image;
 import com.alexvit.cats.di.scope.ApplicationScope;
 
@@ -27,11 +26,7 @@ public class CatRemoteDataSource {
     }
 
     public Observable<List<Image>> getRandomImages(int count) {
-        return service.getImages(count, CatRepository.SIZE_MEDIUM);
-    }
-
-    public Observable<Image> getImageById(String id) {
-        return service.getImageById(id);
+        return service.getImages(count);
     }
 
 }

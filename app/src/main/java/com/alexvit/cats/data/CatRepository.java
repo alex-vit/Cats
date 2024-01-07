@@ -1,15 +1,11 @@
 package com.alexvit.cats.data;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringDef;
 
 import com.alexvit.cats.data.api.CatRemoteDataSource;
 import com.alexvit.cats.di.scope.ApplicationScope;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -22,9 +18,6 @@ import io.reactivex.schedulers.Schedulers;
 
 @ApplicationScope
 public class CatRepository {
-    public static final String SIZE_SMALL = "small";
-    public static final String SIZE_MEDIUM = "med";
-    public static final String SIZE_FULL = "full";
     private static final int DEFAULT_IMAGE_COUNT = 20;
 
     private final CatRemoteDataSource remote;
@@ -50,27 +43,18 @@ public class CatRepository {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Image> getImageById(String id) {
-        var cachedImage = getRandomImages()
-                .filter(Objects::nonNull)
-                .map(images -> {
-                    Image found = null;
-                    for (var image : images) {
-                        if (image.id().equals(id)) {
-                            found = image;
+    public Observable<Image> getImage(String id) {
+        return getRandomImages()
+                .flatMap(images -> {
+                    if (images != null) {
+                        for (var img : images) {
+                            if (img.id().equals(id)) {
+                                return Observable.just(img);
+                            }
                         }
                     }
-                    return found;
-                })
-                .filter(Objects::nonNull);
-        return cachedImage
-                .concatWith(remote.getImageById(id))
-                .distinctUntilChanged()
-                .subscribeOn(Schedulers.io());
+                    return Observable.error(new IllegalStateException(String.format("Image \"%s\" not found.", id)));
+                });
     }
-
-    @StringDef({SIZE_SMALL, SIZE_MEDIUM, SIZE_FULL})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Size {}
 
 }

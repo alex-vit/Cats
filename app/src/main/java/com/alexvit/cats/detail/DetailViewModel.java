@@ -1,5 +1,7 @@
 package com.alexvit.cats.detail;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,7 +33,10 @@ class DetailViewModel extends BaseViewModel<DetailState> {
     }
 
     void load(String id) {
-        subscribe(repository.getImageById(id), image -> {
+        var obs = repository.getImage(id);
+        obs = repository.getImage(id)
+                .doOnNext(image -> Log.d("WTF", "got image " + image.toString()));
+        subscribe(obs, image -> {
             setState(new DetailState(image, false, false));
             Analytics.itemView(id);
         });
