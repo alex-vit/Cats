@@ -3,7 +3,6 @@ package com.alexvit.cats.di.module;
 import android.content.Context;
 
 import com.alexvit.cats.BuildConfig;
-import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.api.CatRemoteDataSource;
 import com.alexvit.cats.data.api.InsertApiKeyInterceptor;
 import com.alexvit.cats.data.api.TheCatApiService;
@@ -30,18 +29,6 @@ public class CatRepositoryModule {
 
     @Provides
     @ApplicationScope
-    CatRepository catRepository(CatRemoteDataSource remote) {
-        return new CatRepository(remote);
-    }
-
-    @Provides
-    @ApplicationScope
-    CatRemoteDataSource catRemoteDataSource(TheCatApiService service) {
-        return new CatRemoteDataSource(service);
-    }
-
-    @Provides
-    @ApplicationScope
     TheCatApiService theCatApiService(Retrofit tmdbRetrofit) {
         return tmdbRetrofit.create(TheCatApiService.class);
     }
@@ -63,12 +50,6 @@ public class CatRepositoryModule {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(insertApiKeyInterceptor).cache(cache);
         return builder.build();
-    }
-
-    @Provides
-    @ApplicationScope
-    InsertApiKeyInterceptor insertApiKeyInterceptor(@ApiKey String apiKey) {
-        return new InsertApiKeyInterceptor(apiKey);
     }
 
     @Provides

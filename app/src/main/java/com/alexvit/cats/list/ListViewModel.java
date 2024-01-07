@@ -8,8 +8,11 @@ import com.alexvit.cats.Analytics;
 import com.alexvit.cats.BaseViewModel;
 import com.alexvit.cats.data.CatRepository;
 import com.alexvit.cats.data.Image;
+import com.alexvit.cats.di.scope.ActivityScope;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 class ListViewModel extends BaseViewModel<ListState> {
 
@@ -44,10 +47,12 @@ class ListViewModel extends BaseViewModel<ListState> {
         Analytics.itemListView();
     }
 
+    @ActivityScope
     static class Factory extends ViewModelProvider.NewInstanceFactory {
 
         private final CatRepository catRepository;
 
+        @Inject
         Factory(CatRepository catRepository) {
             this.catRepository = catRepository;
         }

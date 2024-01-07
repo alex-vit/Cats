@@ -4,11 +4,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 
 import com.alexvit.cats.data.api.CatRemoteDataSource;
+import com.alexvit.cats.di.scope.ApplicationScope;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -17,6 +20,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Aleksandrs Vitjukovs on 11/4/2017.
  */
 
+@ApplicationScope
 public class CatRepository {
     public static final String SIZE_SMALL = "small";
     public static final String SIZE_MEDIUM = "med";
@@ -27,6 +31,7 @@ public class CatRepository {
     @Nullable
     private List<Image> images = null;
 
+    @Inject
     public CatRepository(CatRemoteDataSource remote) {
         this.remote = remote;
     }

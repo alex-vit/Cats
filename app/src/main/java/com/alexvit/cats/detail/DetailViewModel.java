@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.alexvit.cats.Analytics;
 import com.alexvit.cats.BaseViewModel;
 import com.alexvit.cats.data.CatRepository;
+import com.alexvit.cats.di.scope.ActivityScope;
+
+import javax.inject.Inject;
 
 class DetailViewModel extends BaseViewModel<DetailState> {
 
@@ -34,10 +37,12 @@ class DetailViewModel extends BaseViewModel<DetailState> {
         });
     }
 
+    @ActivityScope
     static class Factory extends ViewModelProvider.NewInstanceFactory {
 
         private final CatRepository catRepository;
 
+        @Inject
         Factory(CatRepository catRepository) {
             this.catRepository = catRepository;
         }
