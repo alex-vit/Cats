@@ -155,6 +155,7 @@ public class DetailActivity extends BaseActivity {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         var bitmap = ((BitmapDrawable) resource).getBitmap();
+                        bitmap = bitmap.copy(bitmap.getConfig(), false);
                         zoomableImage.setImage(ImageSource.bitmap(bitmap));
                     }
 
