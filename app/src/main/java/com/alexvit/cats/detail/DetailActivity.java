@@ -157,11 +157,26 @@ public class DetailActivity extends BaseActivity {
                         var bitmap = ((BitmapDrawable) resource).getBitmap();
                         bitmap = bitmap.copy(bitmap.getConfig(), false);
                         zoomableImage.setImage(ImageSource.bitmap(bitmap));
+
+                        var viewAspectRatio = (float) zoomableImage.getWidth() / zoomableImage.getHeight();
+                        var imageAspectRatio = (float) bitmap.getWidth() / bitmap.getHeight();
+                        float minScale;
+                        if (imageAspectRatio > viewAspectRatio) {
+                            minScale = (float) zoomableImage.getWidth() / bitmap.getWidth();
+                        } else {
+                            minScale = (float) zoomableImage.getHeight() / bitmap.getHeight();
+                        }
+                        zoomableImage.setMinScale(minScale);
+
+                        if (minScale > 2) {
+                            zoomableImage.setVisibility(View.GONE);
+                        } else {
+                            zoomableImage.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
-
                     }
                 });
     }
@@ -170,7 +185,6 @@ public class DetailActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
-
         startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
     }
 
