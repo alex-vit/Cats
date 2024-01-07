@@ -2,8 +2,6 @@ package com.alexvit.cats.detail;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
@@ -24,10 +21,8 @@ import com.alexvit.cats.R;
 import com.alexvit.cats.activity.ActivityModule;
 import com.alexvit.cats.activity.BaseActivity;
 import com.alexvit.cats.data.Image;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -50,8 +45,7 @@ public class DetailActivity extends BaseActivity {
     @Inject
     DetailViewModel viewModel;
 
-    private ImageView imageForTransition;
-    private SubsamplingScaleImageView zoomableImage;
+    private ImageView imageView;
     private Toolbar toolbar;
 
     private boolean isUiShown = true;
@@ -79,14 +73,9 @@ public class DetailActivity extends BaseActivity {
             return WindowInsetsCompat.CONSUMED;
         });
 
-        imageForTransition = findViewById(R.id.iv_full);
-        zoomableImage = findViewById(R.id.iv_zoom);
+        imageView = findViewById(R.id.iv_full);
         View root = findViewById(R.id.root);
         root.setOnClickListener(__ -> {
-            isUiShown = !isUiShown;
-            updateUiVisibility();
-        });
-        zoomableImage.setOnClickListener(__ -> {
             isUiShown = !isUiShown;
             updateUiVisibility();
         });
@@ -95,13 +84,8 @@ public class DetailActivity extends BaseActivity {
             isUiShown = savedInstanceState.getBoolean(KEY_UI_VISIBILITY, isUiShown);
         }
 
-        String id = getIntent().getStringExtra(KEY_ID);
-        if (id != null) {
-            viewModel.load(id);
-        } else {
-            throw new IllegalArgumentException("No ID was given.");
-        }
-
+        String id = Objects.requireNonNull(getIntent().getStringExtra(KEY_ID));
+        viewModel.load(id);
     }
 
     @Override
@@ -156,37 +140,7 @@ public class DetailActivity extends BaseActivity {
     private void displayImage(@NonNull Image image) {
         this.image = image;
         setTitle(image.id());
-        GlideApp.with(this).load(image.url()).into(imageForTransition);
-        GlideApp.with(this)
-                .load(image.url())
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        var bitmap = ((BitmapDrawable) resource).getBitmap();
-                        bitmap = bitmap.copy(bitmap.getConfig(), false);
-                        zoomableImage.setImage(ImageSource.bitmap(bitmap));
-
-                        var viewAspectRatio = (float) zoomableImage.getWidth() / zoomableImage.getHeight();
-                        var imageAspectRatio = (float) bitmap.getWidth() / bitmap.getHeight();
-                        float minScale;
-                        if (imageAspectRatio > viewAspectRatio) {
-                            minScale = (float) zoomableImage.getWidth() / bitmap.getWidth();
-                        } else {
-                            minScale = (float) zoomableImage.getHeight() / bitmap.getHeight();
-                        }
-                        zoomableImage.setMinScale(minScale);
-
-                        if (minScale > 2) {
-                            zoomableImage.setVisibility(View.GONE);
-                        } else {
-                            zoomableImage.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
+        GlideApp.with(this).load(image.url()).into(imageView);
     }
 
     private void shareImage(String text) {
