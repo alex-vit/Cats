@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alexvit.cats.Analytics;
 import com.alexvit.cats.App;
@@ -71,6 +73,12 @@ public class DetailActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(insets.left, v.getPaddingTop(), insets.right, v.getPaddingBottom());
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         imageForTransition = findViewById(R.id.iv_full);
         zoomableImage = findViewById(R.id.iv_zoom);
         View root = findViewById(R.id.root);
