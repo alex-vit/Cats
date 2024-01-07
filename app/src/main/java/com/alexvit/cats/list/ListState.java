@@ -9,5 +9,5 @@ import java.util.List;
 public record ListState(
         @Nullable List<Image> images,
         boolean loading,
-        boolean error
+        @Nullable String error
 ) {}

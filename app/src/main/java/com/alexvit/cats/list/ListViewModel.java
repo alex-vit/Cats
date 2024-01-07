@@ -26,12 +26,12 @@ class ListViewModel extends BaseViewModel<ListState> {
 
     @Override
     public void onError(Throwable throwable) {
-        setState(new ListState(currentState.images(), false, true));
+        setState(new ListState(currentState.images(), false, throwable.getMessage()));
     }
 
     @Override
     protected ListState defaultState() {
-        return new ListState(null, true, false);
+        return new ListState(null, true, null);
     }
 
     void refresh() {
@@ -43,7 +43,7 @@ class ListViewModel extends BaseViewModel<ListState> {
     }
 
     private void onImages(List<Image> images) {
-        setState(new ListState(images, false, false));
+        setState(new ListState(images, false, null));
         Analytics.itemListView();
     }
 

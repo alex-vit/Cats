@@ -10,6 +10,7 @@ import com.alexvit.cats.di.qualifier.CacheFile;
 import com.alexvit.cats.di.scope.ApplicationScope;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import dagger.Module;
 import dagger.Provides;
@@ -46,9 +47,14 @@ public class CatRepositoryModule {
     @Provides
     @ApplicationScope
     OkHttpClient okHttpClient(InsertApiKeyInterceptor insertApiKeyInterceptor, Cache cache) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.addInterceptor(insertApiKeyInterceptor).cache(cache);
-        return builder.build();
+        int timeout = 5_000;
+        return new OkHttpClient.Builder()
+                .callTimeout(timeout, TimeUnit.MILLISECONDS)
+                .readTimeout(timeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(timeout, TimeUnit.MILLISECONDS)
+                .cache(cache)
+                .addInterceptor(insertApiKeyInterceptor)
+                .build();
     }
 
     @Provides

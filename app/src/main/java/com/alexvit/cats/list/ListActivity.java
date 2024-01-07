@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -111,6 +112,9 @@ public class ListActivity extends BaseActivity implements ImageListAdapter.OnIma
 
     private void onState(ListState state) {
         showLoading(state.loading());
+        if (state.error() != null) {
+            Toast.makeText(this, state.error(), Toast.LENGTH_SHORT).show();
+        }
         if (state.images() != null) displayImages(state.images());
     }
 

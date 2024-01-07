@@ -62,9 +62,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.squareup.retrofit2:adapter-rxjava2:2.6.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.6.0")
-    implementation("com.squareup.retrofit2:retrofit:2.6.0")
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("io.reactivex.rxjava2:rxjava:2.2.6")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
 
