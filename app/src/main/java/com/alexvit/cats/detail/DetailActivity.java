@@ -2,6 +2,8 @@ package com.alexvit.cats.detail;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
@@ -19,6 +22,10 @@ import com.alexvit.cats.R;
 import com.alexvit.cats.activity.ActivityModule;
 import com.alexvit.cats.activity.BaseActivity;
 import com.alexvit.cats.data.Image;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import javax.inject.Inject;
 
@@ -41,7 +48,8 @@ public class DetailActivity extends BaseActivity {
     @Inject
     DetailViewModel viewModel;
 
-    private ImageView ivFull;
+    private ImageView imageForTransition;
+    private SubsamplingScaleImageView zoomableImage;
     private Toolbar toolbar;
 
     private boolean isUiShown = true;
@@ -63,9 +71,14 @@ public class DetailActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        ivFull = findViewById(R.id.iv_full);
+        imageForTransition = findViewById(R.id.iv_full);
+        zoomableImage = findViewById(R.id.iv_zoom);
         View root = findViewById(R.id.root);
         root.setOnClickListener(__ -> {
+            isUiShown = !isUiShown;
+            updateUiVisibility();
+        });
+        zoomableImage.setOnClickListener(__ -> {
             isUiShown = !isUiShown;
             updateUiVisibility();
         });
@@ -135,9 +148,21 @@ public class DetailActivity extends BaseActivity {
     private void displayImage(@NonNull Image image) {
         this.image = image;
         setTitle(image.id());
+        GlideApp.with(this).load(image.url()).into(imageForTransition);
         GlideApp.with(this)
                 .load(image.url())
-                .into(ivFull);
+                .into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        var bitmap = ((BitmapDrawable) resource).getBitmap();
+                        zoomableImage.setImage(ImageSource.bitmap(bitmap));
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
     }
 
     private void shareImage(String text) {
