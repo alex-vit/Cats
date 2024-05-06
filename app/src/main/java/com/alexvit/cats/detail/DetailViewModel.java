@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 Aleksandrs Vitjukovs. All rights reserved.
+ */
+
 package com.alexvit.cats.detail;
 
 import androidx.annotation.NonNull;
@@ -26,12 +30,12 @@ class DetailViewModel extends BaseViewModel<DetailState> {
     }
 
     @Override
-    public void onError(Throwable throwable) {
+    public void onError(@NonNull Throwable throwable) {
         setState(new DetailState(currentState.image(), false, true));
     }
 
     void load(String id) {
-        subscribe(repository.getImage(id), image -> {
+        subscribe(repository.findImage(id), image -> {
             setState(new DetailState(image, false, false));
             Analytics.itemView(id);
         });
