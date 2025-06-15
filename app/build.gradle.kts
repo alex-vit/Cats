@@ -12,8 +12,8 @@ android {
         applicationId = "com.alexvit.cats"
         minSdk = 21
         targetSdk = 34
-        versionCode = 10105
-        versionName = "1.2.0"
+        versionCode = 10107
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
